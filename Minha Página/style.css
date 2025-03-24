@@ -8,24 +8,25 @@ body {
 
 header {
   background-color:#F4E6D1;
-  padding: 10px;
   text-align: center;
+  padding: 10px;
 }
 
 nav ul {
   list-style: none;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
 }
 
 nav li {
-  display: inline;
   margin: 0 15px;
 }
 
 nav a {
-  align-items: center;
   color: #6A7F3D;
+  align-items: center;
   text-decoration: none;
+ 
 }
 
 nav a i {
