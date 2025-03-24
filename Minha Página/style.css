@@ -48,8 +48,8 @@ nav a:hover {
 
 .quadrado {
   background-color: #F4E6D1;
-  width: 500px;
-  height: 50vh;
+  width: 50%;
+  height: auto;
   padding: 20px;
   margin: 0 auto;
   border-radius: 50px;
@@ -75,4 +75,19 @@ nav a:hover {
 
 .quadrado ul a:hover {
   color:#8A9E58;
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    flex-wrap: wrap;  
+    justify-content: space-evenly;  
+  }
+
+  nav li {
+    margin: 5px 0;  
+  }
+
+  nav a {
+    font-size: 14px;  
+  }
 }
