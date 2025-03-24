@@ -16,6 +16,8 @@ nav ul {
   list-style: none;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 nav li {
@@ -80,14 +82,9 @@ nav a:hover {
 
 @media (max-width: 768px) {
   nav ul {
-    flex-direction: column;  
-    align-items: center; 
+    justify-content: space-around;
   }
-
-  nav li {
-    margin: 10px 0; 
-  }
-
+  
   nav a {
     font-size: 18px;  
     padding: 10px 20px;  
