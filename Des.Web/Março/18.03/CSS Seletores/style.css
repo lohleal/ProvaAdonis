@@ -14,21 +14,21 @@ header {
 
 nav ul {
   list-style: none;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
 }
 
 nav li {
-  display: inline;
   margin: 0 15px;
 }
 
 nav a {
-  align-items: center;
   color: white;
+  align-items: center;
   text-decoration: none;
 }
 
-nav a img {
+nav a i {
   width: 40px;
   height: 40px;
   margin-right: 5px;
@@ -44,8 +44,6 @@ nav a::after {
 nav a:hover {
   color: lightblue;
 }
-
-/* MUDAR A COR DO ICONE DO MENU */
 
 .bottom-line {
   border-bottom: 6px solid lightblue;
