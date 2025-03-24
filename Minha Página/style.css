@@ -16,8 +16,6 @@ nav ul {
   list-style: none;
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
 }
 
 nav li {
