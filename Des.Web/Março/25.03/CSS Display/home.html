@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Memória Barbie Version</title>
+
+    <link rel="stylesheet" href="style.css">
+
+
+</head>
+<body> 
+
+    <div id="menu-cards" class="menu">
+        <img src="simboloB.png" alt="Simbolo">
+        <span>Jogo da Memória Barbie Version</span>
+    </div>
+
+    <div class="container-card">
+        <div class="card" data-type="Sobre Filmes" onclick="iniciarJogo('filme')">
+            <img src="logoM.png" alt="Filme">
+            <span class="data-type-text">Sobre Filmes</span>
+        </div>
+
+        <div class="card" data-type="Sobre Barbie" onclick="iniciarJogo('barbie')">
+            <img src="logoB.png" alt="Barbie">
+            <span class="data-type-text">Sobre Barbie</span>
+        </div>
+
+        <div class="card" data-type="Sobre Ken" onclick="iniciarJogo('ken')">
+            <img src="logoK.png" alt="Ken">
+            <span class="data-type-text">Sobre Ken</span>
+        </div>
+    </div>
+
+    <div id="tabuleiro" class="tabuleiro"></div>
+
+    <footer class="footer">
+        Desenvolvimento de Analice Santos
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
