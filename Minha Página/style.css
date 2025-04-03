@@ -135,6 +135,25 @@ footer {
     text-align: center;
 }
 
+#menu-btn {
+    display: none; 
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(184, 161, 201, 0.8);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+
+}
+
+#menu-btn:hover {
+    background-color: #C44D58;
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
 @media (max-width: 800px) {
     body {
         grid-template-areas:
@@ -148,5 +167,13 @@ footer {
 
     header {
         font-size: x-small;
+    }
+
+    aside{
+        display: none;
+    }
+
+    #menu-btn{
+        display: block;
     }
 }
