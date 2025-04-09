@@ -6,15 +6,21 @@ body {
     width: 100%;
 }
 
-#menu {
+.tabela-menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     background-color: white;
     color: darkblue;
-    display: flex;
-    align-items: center;
+    text-align: center;
+   
     height: 40%;
     padding: 20px;
     margin: 10px 10px;
-    gap: 30px;
+}
+
+#menu {
+    text-align: center;
+    padding: 20px;
 
     animation-name: cores;
     animation-duration: 5s;
@@ -38,8 +44,8 @@ body {
 #menu-img {
     width: 90px;
     height: 90px;
-    margin-right: 25px;
-    margin-left: 25px;
+    margin-left: auto; 
+    margin-right: auto; 
     border-radius: 50%;
 }
 
