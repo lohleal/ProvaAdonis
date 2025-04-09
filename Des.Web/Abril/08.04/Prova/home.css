@@ -76,7 +76,6 @@ body {
 
 #footer {
     background-color: darkblue;
-
     text-align: center;
 }
 
@@ -119,6 +118,10 @@ body {
 }
 
 @media (max-width: 800px) {
+    body{
+        font-size: small;
+    }
+    
     #tabela {
         display: grid;
         grid-template-columns: 1fr 1fr ;
