@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    width: 100%;
+}
+
+div ul{
+    list-style: none;
+}
+
+div li a {
+    position: absolute;
+    background-color: darkblue;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+div li a:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
+}
+
+div li:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
+}
+
+input {
+    text-decoration: none;
+    border: 0px white solid;
+    border-radius: 2px;
+    border-style: outset;
+    border-left-color: black;
+    border-left-width: 1px;
+    border-bottom-color: black;
+    border-bottom-width: 1px ;
+    width: 100%;
+    display: inline-block;
+}
+
+input:focus {
+    outline: none;
+    border: 2px solid darkred;
+}
+
+#estilo-azul {
+    color: darkblue;
+}
+
+#estilo-vermelho {
+    color: darkred;
+}
+
+#estilo-amarelo {
+    color: darkgoldenrod;
+    margin-left: 700px;
+}
+
+#footer {
+    grid-area: footer;
+    background-color: white;
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+}
+
+#footer-line {
+    border-bottom: 2px solid darkblue;
+    width: 95%;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.footer-arrumado {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-left: 80px;
+    margin-right: 80px;
+    gap: 300px;
+}
+
+.image {
+    display: block;
+    background-image: url('img/scotland_yard.png') no-repeat;
+    size: cover;
+    position: center;
+}
+
+@media (max-width: 800px) {
+    body {
+        grid-template-columns: 1fr;
+        min-height: 100vh;
+    }
+
+    #estilo-amarelo {
+        margin-left: 300px;
+    }
+
+    .footer-arrumado {
+        gap: 100px;
+    }
+
+    .image {
+        display: none;
+    }
+}
