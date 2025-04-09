@@ -138,8 +138,8 @@ body {
     #menu-img {
         width: 70px;
         height: 70px;
-        margin-right: 10px;
-        margin-left: 10px;
+        margin-right: auto;
+        margin-left: autp;
         border-radius: 50%;
     }
     
