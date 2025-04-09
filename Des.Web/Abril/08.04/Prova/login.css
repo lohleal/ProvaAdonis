@@ -95,6 +95,8 @@ input:focus {
     body {
         grid-template-columns: 1fr;
         min-height: 100vh;
+
+        font-size: small;
     }
 
     #estilo-amarelo {
