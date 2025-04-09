@@ -121,6 +121,10 @@ body {
     body{
         font-size: small;
     }
+
+    #menu {
+        font-size: smaller;
+    }
     
     #tabela {
         display: grid;
