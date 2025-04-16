@@ -1,0 +1,141 @@
+body {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.menu{
+    background-color: #D3D3D3;
+    grid-column: 1/2;
+    padding: 5%;
+    text-align: center;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.flex-container > div {
+    width: 30%;
+    padding-top: 30%;
+    margin-bottom: 5%;
+}
+
+.quadrado {
+    width: 15%;
+    padding-top: 15%;
+    background-color: black;
+    display: inline-block;
+}
+
+.circulo {
+    width: 15%;
+    padding-top: 15%;
+    background-color: black;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.buttons-alinhados {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttons-alinhados label {
+    margin-top: 5%;
+    text-align: center;
+    width: 90%;
+}
+
+.buttons {
+    width: 50%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding: 3%;
+}
+
+.conteudo {
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .area {
+    display: flex;
+    flex-direction: row; 
+    width: 90%;
+    height: 20%;
+    padding: 2%;
+  }
+  
+  .box {
+    width: 10%;            
+    padding-top: 10%;      
+    margin-left: 2%;
+    background-color: black;
+    transition: border-radius 0.5s ease, background-color 0.5s ease;
+  }
+
+  .selecionado {
+    border: 2px solid #000000;
+  }
+  
+  @media (max-width: 800px) {
+    body {
+      grid-template-columns: 100%;
+    }
+  
+    .menu {
+      grid-column: 1;
+    }
+  
+  
+    .flex-container {
+      justify-content: center; 
+      gap: 5%;
+    }
+  
+    .flex-container > div {
+      width: 28%; 
+      padding-top: 28%;
+      margin-bottom: 10px; 
+    }
+  
+    .quadrado,
+    .circulo {
+      width: 25%;
+      padding-top: 25%;
+      margin: 5%; 
+    }
+  
+    .buttons {
+      width: 80%; 
+    }
+
+    .conteudo {
+        padding: 20px; 
+      }
+  
+    .area {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 5%;
+      min-height: 200px; 
+    }
+  
+    .box {
+      width: 25%; 
+      padding-top: 25%;
+      margin: 2%;
+    }
+  }
