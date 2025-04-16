@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Flexbox</title>
+
+    <link rel="stylesheet" href="scss/style.css">
+</head>
+<body>
+    <div class="menu">
+        <h1>SIMULADOR <br>Flexbox</h1>
+
+        <div>
+            <h3>Preenchimento</h3>
+            <div class="flex-container">
+                <div style="background-color: #FFC0CB;"></div>
+                <div style="background-color: #FF69B4;"></div>
+                <div style="background-color: #C71585;"></div>
+                <div style="background-color: #ADD8E6;"></div>
+                <div style="background-color: #1E90FF;"></div>
+                <div style="background-color: #00008B;"></div>
+            </div>
+        </div>
+
+        <div>
+            <h3>Formato</h3>
+            <div class="quadrado"></div>
+            <div class="circulo"></div>
+        </div>
+
+        <div>
+            <h3>Tamanho</h3>
+            <input type="number" style="width: 50%;" id="tamanho"  min="10" max="40" value="10" onchange="alterarTamanho()">
+        </div>
+
+        <div class="buttons-alinhados">
+            <h3>Alinhamento</h3>
+
+            <label for="flex-Direction">flex-Direction</label>
+            <select id="flex-Direction" class="buttons" onchange="atualizarAlinhamento()">
+                <option value="row">row</option>
+                <option value="row-reverse">row-reverse</option>
+                <option value="column">column</option>
+                <option value="column-reverse">column-reverse</option>
+              </select>
+
+              <label for="justify-content">justify-content</label>
+              <select id="justify-Content" class="buttons" onchange="atualizarAlinhamento()">
+                <option value="flex-start">flex-start</option>
+                <option value="flex-end">flex-end</option>
+                <option value="center">center</option>
+                <option value="space-around">space-around</option>
+                <option value="space-between">space-between</option>
+                <option value="space-evenly">space-evenly</option>
+              </select>
+
+              <label for ="align-items">align-items</label>
+              <select id="align-Items" class="buttons" onchange="atualizarAlinhamento()">
+                <option value="flex-start">flex-start</option>
+                <option value="flex-end">flex-end</option>
+                <option value="center">center</option>
+                <option value="stretch">stretch</option>
+                <option value="baseline">baseline</option>
+              </select>
+        </div>
+    </div>
+
+    <div class="conteudo">
+        <div class="area" id="area">
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+        </div>
+      </div>
+    
+</body>
+<script src="script.js"></script>
+</html>
