@@ -56,14 +56,14 @@ export default function BarraLider() {
   ];
 
   const relatorios = [
-    { ano: '2023', mes: 'Janeiro', turno: 'Manhã', valor: 'R$1000,00' },
-    { ano: '2023', mes: 'Fevereiro', turno: 'Noite', valor: 'R$1500,00' },
+    { ano: '2023', mes: 'Janeiro', turno: 'Manhã', dia: '20/03', valor: 'R$1000,00' },
+    { ano: '2023', mes: 'Fevereiro', turno: 'Noite', dia: '02/11', valor: 'R$1500,00' },
   ];
 
   const chavesMotoristas = ['dataHora', 'placa', 'telefone'];
   const chavesFuncionarios = ['cpf', 'nome', 'telefone'];
   const chavesLogins = ['cpf', 'senha'];
-  const chavesRelatorios = ['ano', 'mes', 'turno', 'valor'];
+  const chavesRelatorios = ['ano', 'mes', 'turno', 'dia', 'valor'];
 
   function abrir(opcao) {
     if (opcao === 'News') return navigate('/news', { state: { username: 'Marielle' } });
@@ -182,10 +182,10 @@ export default function BarraLider() {
 
       {opcaoSelecionada === 'Relatórios' && (
         <Relatorios
-          rows={['Ano', 'Mês', 'Turno', 'Valor']}
+          rows={['Ano', 'Mês', 'Turno', 'Dia', 'Valor']}
           keys={chavesRelatorios}
           data={relatorios}
-          hide={[false, false, false, false]}
+          hide={[false, false, false, false, false]}
           voltar={() => {
             setOpcaoSelecionada('');
             setMostrarVoltar(false);

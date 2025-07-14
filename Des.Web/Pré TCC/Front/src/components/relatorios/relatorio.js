@@ -17,6 +17,7 @@ export default function Relatorios(props) {
   const [ano, setAno] = useState('');
   const [mes, setMes] = useState('');
   const [turno, setTurno] = useState('');
+  const [dia, setDia] = useState('');
   const [mostrarModalTabela, setMostrarModalTabela] = useState(true);
   const [mostrarModalInfo, setMostrarModalInfo] = useState(false);
 
@@ -62,6 +63,12 @@ export default function Relatorios(props) {
               <Option value="">Selecione o Turno</Option>
               <Option value="manha">Manhã</Option>
               <Option value="noite">Noite</Option>
+            </Select>
+
+            <Select onChange={(e) => setDia(e.target.value)}>
+              <Option value="">Selecione o dia</Option>
+              <Option value="manha">Par</Option>
+              <Option value="noite">Ímpar</Option>
             </Select>
           </ContainerPesquisa>
 
