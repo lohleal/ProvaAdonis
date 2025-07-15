@@ -32,7 +32,7 @@ export const LadoTitulo = styled.div`
   width: 98%;
 `;
 
-export const DropTituloContainer = styled.div`  // Corrigido para começar com letra maiúscula
+export const DropTituloContainer = styled.div` 
   position: absolute;
   right: 15px;
   top: 49%;

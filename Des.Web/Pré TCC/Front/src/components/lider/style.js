@@ -8,7 +8,7 @@ export const ContainerPesquisa = styled.div`
 `;
 
 export const BotaoEspacado = styled.div`
-  margin-left: 350px;
+  margin-left: 450px;
 `;
 
 export const InputPesquisa = styled.input`
