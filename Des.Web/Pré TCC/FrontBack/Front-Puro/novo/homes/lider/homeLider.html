@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Líder</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="background">
+
+    <!-- Topo -->
+    <div class="topo">
+      <div class="lado-titulo">
+        <h1 class="titulo" id="titulo">Bem-vindo</h1>
+        <p class="subtitulo" id="subtitulo">
+          Você tem acesso completo à gestão dos funcionários e caminhões
+        </p>
+        <div class="simbolo-usuario-container">
+          <div class="simbolo-usuario" id="simboloUsuario">
+            Marielle
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#5c5c5c" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+            </svg>
+            <div class="menu-usuario" id="menuUsuario">
+              <div class="item-menu" id="botaoSair">Sair</div>
+              <div class="item-menu" onclick="abrirMenu('Dados')">Dados</div>
+              <div class="item-menu" onclick="abrirMenu('Senhas')">Senhas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra lateral -->
+    <div class="barra-lider" id="barraLider">
+      <button class="botao" onclick="abrirMenu('Funcionarios')">Funcionários</button>
+      <button class="botao" onclick="abrirMenu('CriarLogin')">Criar login</button>
+      <button class="botao" onclick="abrirMenu('Turnos')">Turnos</button>
+      <button class="botao" onclick="abrirMenu('Relatorios')">Relatórios</button>
+      <button class="botao" onclick="abrirMenu('CheckList')">CheckList</button>
+      <button class="botao-news" id="botaoNews">News</button>
+    </div>
+
+    <!-- Container de modais via fetch -->
+    <div class="modal-centralizado" id="modalContainer"></div>
+
+    <!-- Logo -->
+    <div class="logo"></div>
+  </div>
+
+  <script src="homeLider.js"></script>
+</body>
+</html>

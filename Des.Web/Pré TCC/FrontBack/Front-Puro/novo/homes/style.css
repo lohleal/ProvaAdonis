@@ -1,0 +1,392 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial;
+}
+
+.background {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #e0e0e0;
+  position: relative;
+}
+
+.topo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.lado-titulo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.titulo {
+  font-size: 70px;
+  font-weight: bolder;
+  color: #5a9c7a;
+  margin: 0;
+}
+
+.subtitulo {
+  font-size: 30px;
+  color: #5c5c5c;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.simbolo-usuario-container {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.simbolo-usuario {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+  color: #5c5c5c;
+  font-size: 30px;
+}
+
+.menu-usuario {
+  display: none;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 25px;
+  padding: 5px;
+  min-width: 150px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.menu-usuario .item-menu {
+  padding: 8px 16px;
+  color: #5c5c5c;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.menu-usuario .item-menu:hover {
+  border-radius: 25px;
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.barra-lider {
+  position: fixed;
+  top: 150px;
+  left: 0;
+  width: 220px;
+  background-color: #f2f2f2;
+  border: 2px solid #5a9c7a;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: width 0.3s ease;
+  align-items: center;
+}
+
+.botao {
+  background-color: #f2c14e;
+  color: #ffffff;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 15px;
+  width: 200px;
+  border: none;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.botao:hover {
+  background-color: #e0ae3f;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.botao-news {
+  background-color: #5a9c7a;
+  color: #ffffff;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 15px;
+  width: 200px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.botao-news:hover {
+  background-color: #49795f;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.conteudo {
+  margin-left: 240px;
+  padding: 20px;
+  flex: 1;
+}
+
+.logo {
+  background-image: url('../imagens/Logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 220px;
+  height: 220px;
+}
+
+/* Style da tabela e modais */
+#modalContainer {
+  display: none; 
+}
+
+.modal-centralizado {
+  position: relative;
+  top: 110px; 
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 1000px;
+  max-height: 80vh; 
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f2f2;
+  border-radius: 25px;
+  padding: 24px;
+  box-shadow: 0 0 20px rgba(114, 84, 84, 0.3);
+  font-size: 18px;
+  color: #5c5c5c;
+  overflow-y: auto;
+}
+.container-pesquisa {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.input-pesquisa {
+  border: solid 2px #5a9c7a;
+  width: 290px;
+  border-radius: 50px;
+  padding: 15px;
+  color: #5c5c5c;
+  font-size: 18px;
+}
+
+.input-pesquisa:focus {
+  outline: none;
+  border-color: #49795f;
+  transform: scale(1.02);
+}
+
+.icone-pesquisa {
+  fill: #5a9c7a;
+  transition: all 0.3s ease;
+}
+
+.icone-pesquisa:hover {
+  fill: #49795f;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.botao-acao {
+  background-color: #f2c14e;
+  color: #ffffff;
+  border: none;
+  border-radius: 15px;
+  padding: 6px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 5px;
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+.botao-acao:hover {
+  background-color: #e0ae3f;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.25);
+  cursor: pointer;
+}
+
+.botao-acao svg {
+  fill: #ffff;
+  width: 30px;
+  height: 30px;
+}
+
+.botao-fechar {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+
+  transition: all 0.3s ease;
+}
+
+.botao-fechar svg {
+  fill: #5a9c7a;
+  width: 30px;
+  height: 30px;
+}
+
+.botao-fechar:hover svg {
+  fill: #49795f;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.25);
+  cursor: pointer;
+}
+
+.tabela-estilizada table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-estilizada th {
+  background-color: #cfcfcf; 
+  color: #5c5c5c; 
+  padding: 16px;
+  text-align: left;
+}
+
+.tabela-estilizada td {
+  background-color: #e6e6e6;
+  color: #5c5c5c;
+  padding: 16px;
+}
+
+.modal-fundo-transparente {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formulario-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.label {
+  color: #5a9c7a;
+  font-weight: bolder;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-modal {
+  border: solid 2px #5a9c7a;
+  border-radius: 50px;
+  padding: 15px;
+  align-self: center;
+  color: #5c5c5c;
+  width: 300px;
+}
+
+.input-modal:focus {
+  outline: none;
+  border-color: #49795f;
+  transform: scale(1.02);
+}
+
+.select {
+  padding: 5px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid #5c5c5c;
+  background-color: #ffffff;
+  color: #5c5c5c;
+  width: 200px;
+  cursor: pointer;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #3a3a3a;
+}
+
+.option {
+  background-color: #ffffff;
+  color: #5c5c5c;
+  font-size: 15px;
+}
+
+.label-textarea {
+  color: #49795f;
+  font-weight: bolder;
+}
+
+.label-textarea textarea {
+  border: solid 1px #49795f;
+  padding: 20px;
+  color: #5c5c5c;
+  width: 100%;
+  resize: none;
+  transition: all 0.3s ease;
+}
+
+.label-textarea textarea:focus {
+  outline: none;
+  border-color: #5a9c7a;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.confirmar {
+  background-color: #f2c14e;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 20px;
+  width: 300px;
+  border: none;
+  border-radius: 25px;
+  align-self: center;
+  transition: all 0.3s ease;
+}
+
+.confirmar:hover {
+  background-color: #e0ae3f; 
+  transform: scale(1.05); 
+  box-shadow: 0 6px 10px rgba(0,0,0,0.25); 
+  cursor: pointer;
+}
