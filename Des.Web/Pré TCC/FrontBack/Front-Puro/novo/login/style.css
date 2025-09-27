@@ -79,7 +79,7 @@ body {
     padding: 15px;
     font-size: 18px;
     color: #5c5c5c;
-    width: 50%;
+    width: 250px;
     box-sizing: border-box;
     transition: all 0.3s ease-in-out;
   }
@@ -98,7 +98,7 @@ body {
     padding: 20px;
     border: none;
     border-radius: 50px;
-    width: 50%;
+    width: 250px;
     transition: all 0.3s ease-in-out;
   }
   
