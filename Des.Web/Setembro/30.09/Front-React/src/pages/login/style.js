@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
-export const Background = styled.div `
-    background:rgb(255, 255, 255);
+export const Background = styled.div`
+    background: #582770;
+    display: flex;
+    align-items: center;   
+    justify-content: center;
+    min-height: 100vh;     
     width: 100%;
-    margin-top: 50px;
-    margin-bottom: 50px
 `;
 
 export const Container = styled.div`
@@ -13,7 +15,7 @@ export const Container = styled.div`
     gap: 5px;
     min-width: 100%;
     min-height: 100vh;
-    background: #582770;
+    background: white;
     box-sizing: border-box;
 
     @media (max-width: 800px) {

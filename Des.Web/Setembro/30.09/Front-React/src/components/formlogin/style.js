@@ -94,7 +94,6 @@ export const SendBox = styled.div`
     text-align: center;
     width: 90%;
     padding-bottom: 30px;
-    gap: 450px;
 `
 
 export const MsgBox = styled.div`

@@ -1,14 +1,13 @@
 import styled from 'styled-components';
-// import logo_depen from '../../images/logo_depen.png';
-import logo_depen from '../../images/ifpr_logo.png';
+
+import Banco_logo from '../../images/Banco_logo.png';
 
 export const Container = styled.div`
     
-    background-image: url( ${logo_depen});
+    background-image: url( ${Banco_logo});
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    border-left: 1px solid #58227;
 
     @media (max-width: 800px) {
         display: none;

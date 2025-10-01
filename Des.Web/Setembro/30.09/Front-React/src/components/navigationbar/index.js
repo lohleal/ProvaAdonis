@@ -8,7 +8,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import DropTitle from "../droptitle";
-import logo_depen from '../../images/ifpr_logo.jpeg';
+import Banco_logo from '../../images/Banco_logo.png';
 
 import UserContext from '../../contexts/UserContext'
 import { Client, removeToken }  from '../../api/client';
@@ -43,7 +43,7 @@ function NavigationBar() {
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
         <Navbar.Brand href="#">
-          <Image src={logo_depen} />
+          <Image src={Banco_logo} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">

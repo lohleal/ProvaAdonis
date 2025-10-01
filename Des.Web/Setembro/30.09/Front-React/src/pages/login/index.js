@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Container, Background } from './style';
 import FormLogin from '../../components/formlogin';
 import ImageLogin from '../../components/imagelogin';
+import Logo from '../../components/logo';
 import { Client } from '../../api/client'
 import { OrbitProgress } from "react-loading-indicators";
 
@@ -36,15 +37,15 @@ export default function Login() {
         load 
         ?
             <Container className="d-flex justify-content-center mt-5">
-                <OrbitProgress variant="spokes" color="#32cd32" size="medium" text="" textColor="" />
+                <OrbitProgress variant="spokes" color="#582770" size="medium" text="" textColor="" />
             </Container>
         :
             <Container>
                 <Background>
-                    <FormLogin />
+                    <Logo size="large" />
                 </Background>
-              
-                <ImageLogin />
+
+                <FormLogin />
             </Container>
     )
 }

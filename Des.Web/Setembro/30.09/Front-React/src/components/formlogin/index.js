@@ -21,7 +21,7 @@ import {
     LinkForgot,
 } from "./style"
 
-import logo_depen from '../../images/logo_depen.png';
+import Banco_logo from '../../images/Banco_logo.png';
 
 export default function FormLogin() {
     
@@ -67,7 +67,7 @@ export default function FormLogin() {
             <BoxIcon>
                 <div></div>
                 <BoxItem>
-                    <Icon src={logo_depen}/>
+                    <Icon src={Banco_logo}/>
                 </BoxItem>
                 <div></div>
             </BoxIcon>
