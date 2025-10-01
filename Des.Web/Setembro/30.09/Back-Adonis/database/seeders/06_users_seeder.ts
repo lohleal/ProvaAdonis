@@ -1,15 +1,14 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
-import Usuario from '#models/usuario'
+import Usuario from '#models/user'
 import Cliente from '#models/cliente'
 
-export default class UsuarioSeeder extends BaseSeeder {
+export default class Userseeder extends BaseSeeder {
   public async run() {
     // Exemplo: criar um gerente
     await Usuario.create({
       email: 'gerente@teste.com',
-      senha: '123456',  
-      perfil: 'gerente',
-      cliente_id: null,
+      senha: '123456',
+      papel_id: 1, 
     })
 
     // Exemplo: criar um cliente vinculado a um cliente já existente
@@ -17,16 +16,14 @@ export default class UsuarioSeeder extends BaseSeeder {
 
     await Usuario.create({
       email: 'cliente1@teste.com',
-      senha: '123456', 
-      perfil: 'cliente',
-      cliente_id: cliente.id,
+      senha: '123456',
+      papel_id: 2, 
     })
 
     await Usuario.create({
       email: 'cliente2@teste.com',
-      senha: '123456', 
-      perfil: 'cliente',
-      cliente_id: cliente.id,
+      senha: '123456',
+      papel_id: 2, 
     })
   }
 }

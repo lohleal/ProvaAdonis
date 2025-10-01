@@ -1,6 +1,5 @@
 import ContaCorrente from "#models/conta_corrente"
 import Movimentacao from "#models/movimentacao"
-import { isPartOfTypeOnlyImportOrExportDeclaration } from "typescript"
 
 export default class MovimentacaoService {
   static async listarMovimentacoes() {

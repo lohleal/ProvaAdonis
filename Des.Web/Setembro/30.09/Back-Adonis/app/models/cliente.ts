@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany, HasMany } from '@adonisjs/lucid/orm'
-import ContaCorrente from './conta_corrente.js'
-import Usuario from './usuario.js'
+import ContaCorrente from './conta_corrente.js' 
 
 export default class Cliente extends BaseModel {
   @column({ isPrimary: true })
@@ -39,7 +38,4 @@ export default class Cliente extends BaseModel {
 
   @hasMany(() => ContaCorrente)
   declare contas: HasMany<typeof ContaCorrente>
-
-  @hasMany(() => Usuario)
-  declare usuarios: HasMany<typeof Usuario>
 }
