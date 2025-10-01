@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+  <div class="background">
+    <!-- Título e botão voltar -->
+    <div class="lado-titulo">
+      <button class="botao-voltar" id="botaoVoltar">←</button>
+      <h1 class="titulo">Família BR Park</h1>
+    </div>
+
+    <!-- Subtítulo -->
+    <p class="subtitulo">Identifique-se para prosseguir</p>
+
+    <!-- Card de login -->
+    <div class="card">
+      <input type="text" placeholder="Digite sua identificação" id="inputIdentificacao" class="input-identificacao">
+      <input type="password" placeholder="Digite a senha" id="inputPassword" class="input-password">
+      <button id="botaoConfirmar" class="botao">Confirmar</button>
+    </div>
+
+    <!-- Logo -->
+    <div class="logo"></div>
+  </div>
+
+  <script src="login.js"></script>
+
+  <div id="modalErro" class="modal-erro">
+    Nome ou senha incorretos
+  </div>
+
+</body>
+</html>

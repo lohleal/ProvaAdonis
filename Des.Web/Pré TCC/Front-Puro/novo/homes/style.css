@@ -1,0 +1,488 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial;
+  overflow-x: hidden;
+  /* Previne scroll horizontal */
+}
+
+.background {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #e0e0e0;
+  position: relative;
+}
+
+.topo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.lado-titulo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.titulo {
+  font-size: 70px;
+  font-weight: bolder;
+  color: #5a9c7a;
+  margin: 0;
+}
+
+.subtitulo {
+  font-size: 30px;
+  color: #5c5c5c;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.simbolo-usuario-container {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.simbolo-usuario {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+  color: #5c5c5c;
+  font-size: 30px;
+}
+
+.menu-usuario {
+  display: none;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 25px;
+  padding: 5px;
+  min-width: 150px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.menu-usuario .item-menu {
+  padding: 8px 16px;
+  color: #5c5c5c;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.menu-usuario .item-menu:hover {
+  border-radius: 25px;
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.barra {
+  position: fixed;
+  top: 150px;
+  left: 0;
+  width: 220px;
+  background-color: #f2f2f2;
+  border: 2px solid #5a9c7a;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: width 0.3s ease;
+  align-items: center;
+  z-index: 100;
+}
+
+.botao {
+  background-color: #f2c14e;
+  color: #ffffff;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 15px;
+  width: 200px;
+  border: none;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.botao:hover {
+  background-color: #e0ae3f;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+
+#botaoNews {
+  background-color: #5a9c7a;
+}
+
+#botaoNews:hover {
+  background-color: #49795f;
+
+}
+
+#confirmarAdicionar, #confirmarAtualizar, #confirmarRemover {
+  width: 250px;
+}
+
+.conteudo {
+  margin-left: 240px;
+  padding: 20px;
+  flex: 1;
+}
+
+.logo {
+  background-image: url('../imagens/Logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 220px;
+  height: 220px;
+  z-index: 1;
+}
+
+/* Container principal dos modais */
+#modalContainer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 900px;
+  height: 40vh;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  margin-left: 19%;
+}
+
+.modal-centralizado {
+  position: relative;
+  max-width: 900vw;
+  max-height: 90vh;
+  width: auto;
+
+  display: flex;
+  flex-direction: column;
+  border-radius: 25px;
+  padding: 24px;
+  font-size: 18px;
+  color: #5c5c5c;
+  overflow: hidden;
+  margin: 20px;
+}
+
+.modal-secundario {
+  position: fixed;
+  top: 20%;
+  right: 0;
+  background-color: #f2f2f2;
+  border: 2px solid #5a9c7a;
+  border-radius: 20px;
+  width: 500px;
+  height: 45vh;
+  max-width: 900vw;
+  max-height: 90vh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-secundario-checklist {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f2f2f2;
+  border: 2px solid #5a9c7a;
+  border-radius: 20px;
+  width: 950px;
+  height: 75vh;
+  max-width: 900vw;
+  max-height: 90vh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  margin-left: 19%;
+}
+
+.container-pesquisa {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap; /* Permite quebra de linha em telas menores */
+}
+
+.input-pesquisa {
+  border: solid 2px #5a9c7a;
+  width: 290px;
+  border-radius: 50px;
+  padding: 15px;
+  background-color: #e6e6e6;
+  color: #5c5c5c;
+  font-size: 18px;
+  max-width: 100%; /* Previne overflow */
+}
+
+.input-pesquisa:focus {
+  outline: none;
+  border-color: #49795f;
+  transform: scale(1.02);
+}
+
+/* Estilos específicos para os botões de ação na tabela */
+.botao-acao {
+  background-color: #f2c14e;
+  color: #ffffff;
+  border: none;
+  border-radius: 15px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 2px;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.botao-acao:hover {
+  background-color: #e0ae3f;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.botao-acao svg {
+  fill: #ffffff;
+  width: 20px;
+  height: 20px;
+}
+
+.botao-fechar {
+  position: absolute;
+  top: 16px;
+  right: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.botao-fechar svg {
+  fill: #5a9c7a;
+  width: 30px;
+  height: 30px;
+}
+
+.botao-fechar:hover svg {
+  fill: #49795f;
+  transform: scale(1.05);
+}
+
+/* Estilos da tabela */
+.tabela-estilizada {
+  width: 100%;
+  margin-top: 20px;
+  overflow-x: auto; /* Scroll horizontal se necessário */
+  overflow-y: auto; /* Scroll vertical se necessário */
+  max-height: 50vh;
+}
+
+.tabela-estilizada table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 600px;
+}
+
+.tabela-estilizada th {
+  background-color: #5a9c7a;
+  color: #ffffff;
+  padding: 16px;
+  text-align: left;
+  font-weight: bold;
+  white-space: nowrap; /* Previne quebra de linha */
+}
+
+.tabela-estilizada td {
+  background-color: #e6e6e6;
+  color: #5c5c5c;
+  padding: 16px;
+  border-bottom: 1px solid #cfcfcf;
+  white-space: nowrap; /* Previne quebra de linha */
+}
+
+.tabela-estilizada tr:hover td {
+  background-color: #d6d6d6;
+}
+
+/* Formulários nos modais */
+.formulario-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+  width: 100%;
+  align-items: center;
+}
+
+.label {
+  color: #5a9c7a;
+  font-weight: bolder;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 24px;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.input-modal {
+  border: solid 2px #5a9c7a;
+  border-radius: 50px;
+  padding: 15px;
+  font-size: 18px;
+  color: #5c5c5c;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  transition: all 0.3s ease-in-out;
+}
+
+.input-modal:focus {
+  outline: none;
+  border-color: #5a9c7a;
+  transform: scale(1.02);
+}
+
+.select {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: 2px solid #5a9c7a;
+  background-color: #ffffff;
+  color: #5c5c5c;
+  width: 100%;
+  max-width: 250px;
+  cursor: pointer;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #49795f;
+}
+
+.option {
+  background-color: #ffffff;
+  color: #5c5c5c;
+  font-size: 16px;
+}
+
+.label-textarea {
+  color: #49795f;
+  font-weight: bolder;
+  width: 500px;
+}
+
+.label-textarea textarea {
+  border: solid 2px #5a9c7a;
+  padding: 15px;
+  color: #5c5c5c;
+  width: 100%;
+  resize: none;
+  border-radius: 15px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.label-textarea textarea:focus {
+  outline: none;
+  border-color: #49795f;
+  transform: scale(1.02);
+}
+
+/* Estilos específicos para o modal de criar login */
+.modal-criar-login {
+  background-color: #f8f9fa;
+  border-left: 4px solid #5a9c7a;
+}
+
+.status-ativo {
+  color: #5a9c7a;
+  font-weight: bold;
+}
+
+.status-inativo {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.modal-algo {
+  position: fixed;
+  top: 100px;
+  right: -400px; 
+  width: 350px;       
+  height: auto;       
+  padding: 10px; 
+  background-color: #ffffff; 
+  border: 2px solid #5a9c7a; 
+  border-radius: 25px;
+  color: #5c5c5c;
+  font-size: 25px;
+  transition: right 0.5s ease; 
+  text-align: center; 
+  z-index: 10000;
+}
+.modal-algo.show {
+  right: 10px; 
+}
+
+/* Estilos específicos para o modal de infos */
+#modalInfos {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#modalInfos .modal-centralizado {
+  background-color: #ffffff;
+  border: 2px solid #5a9c7a;
+  border-radius: 25px;
+  padding: 30px;
+  width: 400px;
+  max-width: 90vw;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
