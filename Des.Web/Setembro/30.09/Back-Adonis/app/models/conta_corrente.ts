@@ -1,10 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo, hasMany,  } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Cliente from './cliente.js'
 import Movimentacao from './movimentacao.js'
 import AplicacaoFinanceira from './aplicacao_financeira.js'
 
 export default class ContaCorrente extends BaseModel {
+  static table = 'contas_correntes'
+  
   @column({ isPrimary: true })
   declare id: number
 

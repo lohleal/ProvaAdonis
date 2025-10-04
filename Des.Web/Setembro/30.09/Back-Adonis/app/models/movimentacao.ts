@@ -1,8 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import ContaCorrente from './conta_corrente.js'
 
 export default class Movimentacao extends BaseModel {
+  static table = 'movimentacoes'
+  
   @column({ isPrimary: true })
   declare id: number
 

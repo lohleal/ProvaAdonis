@@ -8,7 +8,7 @@ import { Client } from '../../api/client';
 import { getPermissions } from '../../service/PermissionService';
 import { getDataUser } from '../../service/UserService';
 
-export default function HomeAluno() {
+export default function IndexContaCorrente() {
     const [data, setData] = useState([]);
     const [load, setLoad] = useState(true);
     const navigate = useNavigate();
@@ -18,14 +18,17 @@ export default function HomeAluno() {
     function fetchData() {
         setLoad(true);
         setTimeout(() => {
-            Client.get('alunos')
+            Client.get('contasCorrentes')
                 .then(res => {
-                    
-                    const alunos = res.data.data.map(a => ({
-                        ...a,
-                        curso_nome: a.curso?.nome || '—'
+                    const contas = res.data.data.map(c => ({
+                        ...c,
+                        saldo_formatado: new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        }).format(c.saldo),
+                        cliente_nome: c.cliente?.nome_completo || '—'
                     }));
-                    setData(alunos);
+                    setData(contas);
                 })
                 .catch(console.error)
                 .finally(() => setLoad(false));
@@ -34,7 +37,7 @@ export default function HomeAluno() {
 
     function verifyPermission() {
         if(!dataUser) navigate('/login');
-        else if(permissions.listAluno === 0) navigate(-1);
+        else if(permissions.listContaCorrente === 0) navigate(-1);
     }
 
     useEffect(() => {
@@ -51,13 +54,13 @@ export default function HomeAluno() {
                   </Container>
                 : <Container className='mt-2'>
                     <DataTable 
-                        title="Alunos Registrados" 
-                        rows={['Nome', 'Curso', 'Ações']}
-                        hide={[false, false, false]}
+                        title="Contas Correntes Registradas" 
+                        rows={['Nº Conta', 'Agência', 'Saldo', 'Cliente', 'Ações']}
+                        hide={[false, false, false, false, false]}
                         data={data}
-                        keys={['nome', 'curso_nome']} 
-                        resource='alunos'
-                        crud={['viewAluno', 'createAluno', 'editAluno', 'deleteAluno']}
+                        keys={['numero_conta', 'numero_agencia', 'saldo_formatado', 'cliente_nome']} 
+                        resource='contas-correntes'
+                        crud={['viewContaCorrente', 'createContaCorrente', 'editContaCorrente', 'deleteContaCorrente']}
                     />
                   </Container>
             }

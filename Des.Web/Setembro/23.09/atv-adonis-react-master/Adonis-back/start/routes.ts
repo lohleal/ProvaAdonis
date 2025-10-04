@@ -33,7 +33,7 @@ router.group(() => {
   router.get('matriculas', '#controllers/matriculas_controller.index')
   router.post('matriculas', '#controllers/matriculas_controller.store')
   router.delete('matriculas/:alunoId/:disciplinaId', '#controllers/matriculas_controller.destroy')
-}).use([middleware.auth()])
+})
 
 // Rota pública boas-vindas / autenticação
 router.get('/hello', async () => {

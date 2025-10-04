@@ -3,7 +3,7 @@ import Movimentacao from '#models/movimentacao'
 import { DateTime } from 'luxon'
 
 export default class MovimentacaoSeeder extends BaseSeeder {
-  public async run () {
+  public async run() {
     await Movimentacao.createMany([
       {
         tipo: 'deposito',

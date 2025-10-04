@@ -13,16 +13,16 @@ export default class ClienteSeeder extends BaseSeeder {
       rua: 'Rua A',
       numero_casa: '123',
     })
-
+    
     await Cliente.create({
       nome_completo: 'Cliente 2',
       email: 'cliente2@teste.com',
       senha: '123456',
-      cpf: '12345678901',
+      cpf: '98765432100',
       cidade: 'Paranaguá',
       estado: 'PR',
-      rua: 'Rua A',
-      numero_casa: '123',
-    })
+      rua: 'Rua B',
+      numero_casa: '456',
+    })    
   }
 }

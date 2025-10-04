@@ -4,25 +4,25 @@ import Login from './pages/login'
 import Error from './pages/error'
 import Home from './pages/home'
 
-// Cursos
-import Cursos from './pages/cursos'
-import CursosCreate from './pages/cursos/create'
-import CursosEdit from './pages/cursos/edit'
+// Clientes
+import Clientes from './pages/clientes'
+import ClientesCreate from './pages/cliente/create'
+import ClientesEdit from './pages/cliente/edit'
 
-// Disciplinas
-import Disciplinas from './pages/disciplinas'
-import DisciplinasCreate from './pages/disciplinas/create'
-import DisciplinasEdit from './pages/disciplinas/edit'
+// Contas Correntes
+import ContasCorrentes from './pages/contaCorrente'
+import ContasCorrentesCreate from './pages/contaCorrente/create'
+import ContasCorrentesEdit from './pages/contaCorrente/edit'
 
-// Alunos
-import Alunos from './pages/alunos'
-import AlunosCreate from './pages/alunos/create'
-import AlunosEdit from './pages/alunos/edit'
+// Movimentações
+import Movimentacoes from './pages/movimentacoes'
+import MovimentacoesCreate from './pages/movimentacao/create'
+import MovimentacoesEdit from './pages/movimentacao/edit'
 
-// Matrículas
-import Matriculas from './pages/matriculas'
-import MatriculasCreate from './pages/matriculas/create'
-import MatriculasEdit from './pages/matriculas/edit'
+// Aplicações Financeiras
+import AplicacoesFinanceiras from './pages/aplicacoesFinanceiras'
+import AplicacoesFinanceirasCreate from './pages/aplicacoesFinanceiras/create'
+import AplicacoesFinanceirasEdit from './pages/aplicacoesFinanceiras/edit'
 
 const router = createBrowserRouter([
     { 
@@ -42,60 +42,60 @@ const router = createBrowserRouter([
         element: <Home />,
     },
 
-    // Cursos
+    // Clientes
     {
-        path: "/cursos", 
-        element: <Cursos />,
+        path: "/clientes", 
+        element: <Clientes />,
     },
     {
-        path: "/cursos/create", 
-        element: <CursosCreate />,
+        path: "/clientes/create", 
+        element: <ClientesCreate />,
     },
     {
-        path: "/cursos/edit", 
-        element: <CursosEdit />,
-    },
-
-    // Disciplinas
-    {
-        path: "/disciplinas", 
-        element: <Disciplinas />,
-    },
-    {
-        path: "/disciplinas/create", 
-        element: <DisciplinasCreate />,
-    },
-    {
-        path: "/disciplinas/edit", 
-        element: <DisciplinasEdit />,
+        path: "/clientes/edit", 
+        element: <ClientesEdit />,
     },
 
-    // Alunos
+    // Contas Correntes
     {
-        path: "/alunos", 
-        element: <Alunos />,
+        path: "/contas-correntes", 
+        element: <ContasCorrentes />,
     },
     {
-        path: "/alunos/create", 
-        element: <AlunosCreate />,
+        path: "/contas-correntes/create", 
+        element: <ContasCorrentesCreate />,
     },
     {
-        path: "/alunos/edit", 
-        element: <AlunosEdit />,
+        path: "/contas-correntes/edit", 
+        element: <ContasCorrentesEdit />,
     },
 
-    // Matrículas
+    // Movimentações
     {
-        path: "/matriculas", 
-        element: <Matriculas />,
+        path: "/movimentacoes", 
+        element: <Movimentacoes />,
     },
     {
-        path: "/matriculas/create", 
-        element: <MatriculasCreate />,
+        path: "/movimentacoes/create", 
+        element: <MovimentacoesCreate />,
     },
     {
-        path: "/matriculas/edit", 
-        element: <MatriculasEdit />,
+        path: "/movimentacoes/edit", 
+        element: <MovimentacoesEdit />,
+    },
+
+    // Aplicações Financeiras
+    {
+        path: "/aplicacoes-financeiras", 
+        element: <AplicacoesFinanceiras />,
+    },
+    {
+        path: "/aplicacoes-financeiras/create", 
+        element: <AplicacoesFinanceirasCreate />,
+    },
+    {
+        path: "/aplicacoes-financeiras/edit", 
+        element: <AplicacoesFinanceirasEdit />,
     },
 ])
 

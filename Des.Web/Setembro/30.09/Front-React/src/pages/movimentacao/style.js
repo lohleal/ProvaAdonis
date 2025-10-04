@@ -18,6 +18,24 @@ export const Input = styled.input `
     }
 `
 
+export const Select = styled.select `
+    display: inline-block;
+    width: 90%;
+    height: 30px;
+    border: 0px;
+    border-left: 1px solid #888;
+    border-bottom: 1px solid #888;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+
+    &:focus {
+        outline: none;
+        border: 1px solid #555;
+        border-radius: 4px;
+    }
+`
+
 export const Label = styled.label`
     display: block;
     font-size: 18px;

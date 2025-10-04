@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, belongsTo, BelongsTo } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Papel from './papel.js'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
@@ -25,7 +26,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare senha: string
 
   @column()
-  declare papel_id: number | null
+  declare papel_id: number 
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -35,6 +36,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
 
-   @belongsTo(() => Papel, { foreignKey: 'cliente_id' })
+  @belongsTo(() => Papel, { foreignKey: 'papel_id' })
   declare papel: BelongsTo<typeof Papel>
 }
