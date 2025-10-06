@@ -5,7 +5,7 @@ export default class UserSeeder extends BaseSeeder {
   public async run() {
     // Criar gerente
     await User.create({
-      nomeCompleto: 'Gerente Principal',
+      nome_completo: 'Gerente Principal',
       email: 'gerente@teste.com',
       senha: '123456',
       papel_id: 1, 
@@ -13,14 +13,14 @@ export default class UserSeeder extends BaseSeeder {
 
     // Criar clientes (usuários)
     await User.create({
-      nomeCompleto: 'Cliente 1',
+      nome_completo: 'Cliente 1',
       email: 'cliente1@teste.com',
       senha: '123456',
       papel_id: 2, 
     })
 
     await User.create({
-      nomeCompleto: 'Cliente 2', 
+      nome_completo: 'Cliente 2', 
       email: 'cliente2@teste.com',
       senha: '123456',
       papel_id: 2, 

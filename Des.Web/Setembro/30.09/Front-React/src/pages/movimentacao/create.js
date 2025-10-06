@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Container, Button, Alert } from 'react-bootstrap';
 import { OrbitProgress } from "react-loading-indicators";
 import NavigationBar from '../../components/navigationbar';
-import { Label, Input, Select } from "./style";
+import { Label, Input, Select, Submit } from "./style";
 import { Client } from '../../api/client';
 import { getPermissions } from '../../service/PermissionService';
 import { getDataUser } from '../../service/UserService';
@@ -256,16 +256,8 @@ export default function CreateMovimentacao() {
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
-                        <Button variant="secondary" onClick={() => navigate('/movimentacoes')}>
-                            Voltar
-                        </Button>
-                        <Button 
-                            variant="primary" 
-                            onClick={sendData}
-                            disabled={!tipo || !valor}
-                        >
-                            Cadastrar
-                        </Button>
+                        <Submit value="Voltar" onClick={() => navigate('/movimentacoes')} />
+                        <Submit value="Cadastrar" onClick={sendData} disabled={!tipo || !valor} />
                     </div>
                 </Container>
             }

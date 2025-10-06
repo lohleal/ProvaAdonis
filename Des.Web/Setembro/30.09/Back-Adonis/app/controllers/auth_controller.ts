@@ -20,7 +20,7 @@ export default class AuthController {
         message: 'Usuário registrado com sucesso',
         user: {
           id: user.id,
-          nomeCompleto: user.nomeCompleto,
+          nomeCompleto: user.nome_completo,
           email: user.email,
           papel_id: user.papel_id,
           createdAt: user.createdAt,
@@ -59,7 +59,7 @@ export default class AuthController {
         message: 'Login realizado com sucesso',
         user: {
           id: user.id,
-          nomeCompleto: user.nomeCompleto,
+          nomeCompleto: user.nome_completo,
           email: user.email,
         },
         token: {
@@ -103,7 +103,7 @@ export default class AuthController {
       return response.ok({
         user: {
           id: user.id,
-          nomeCompleto: user.nomeCompleto,
+          nomeCompleto: user.nome_completo,
           email: user.email,
           papel_id: user.papel_id,
           createdAt: user.createdAt,

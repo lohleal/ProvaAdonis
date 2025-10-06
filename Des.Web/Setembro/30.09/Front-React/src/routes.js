@@ -5,7 +5,7 @@ import Error from './pages/error'
 import Home from './pages/home'
 
 // Clientes
-import Clientes from './pages/clientes'
+import Clientes from './pages/cliente'
 import ClientesCreate from './pages/cliente/create'
 import ClientesEdit from './pages/cliente/edit'
 
@@ -15,14 +15,14 @@ import ContasCorrentesCreate from './pages/contaCorrente/create'
 import ContasCorrentesEdit from './pages/contaCorrente/edit'
 
 // Movimentações
-import Movimentacoes from './pages/movimentacoes'
+import Movimentacoes from './pages/movimentacao'
 import MovimentacoesCreate from './pages/movimentacao/create'
 import MovimentacoesEdit from './pages/movimentacao/edit'
 
 // Aplicações Financeiras
-import AplicacoesFinanceiras from './pages/aplicacoesFinanceiras'
-import AplicacoesFinanceirasCreate from './pages/aplicacoesFinanceiras/create'
-import AplicacoesFinanceirasEdit from './pages/aplicacoesFinanceiras/edit'
+import AplicacoesFinanceiras from './pages/aplicacaoFinanceira'
+import AplicacoesFinanceirasCreate from './pages/aplicacaoFinanceira/create'
+import AplicacoesFinanceirasEdit from './pages/aplicacaoFinanceira/edit'
 
 const router = createBrowserRouter([
     { 
@@ -58,15 +58,15 @@ const router = createBrowserRouter([
 
     // Contas Correntes
     {
-        path: "/contas-correntes", 
+        path: "/contasCorrentes", 
         element: <ContasCorrentes />,
     },
     {
-        path: "/contas-correntes/create", 
+        path: "/contasCorrentes/create", 
         element: <ContasCorrentesCreate />,
     },
     {
-        path: "/contas-correntes/edit", 
+        path: "/contasCorrentes/edit", 
         element: <ContasCorrentesEdit />,
     },
 
@@ -86,15 +86,15 @@ const router = createBrowserRouter([
 
     // Aplicações Financeiras
     {
-        path: "/aplicacoes-financeiras", 
+        path: "/aplicacoesFinanceiras", 
         element: <AplicacoesFinanceiras />,
     },
     {
-        path: "/aplicacoes-financeiras/create", 
+        path: "/aplicacoesFinanceiras/create", 
         element: <AplicacoesFinanceirasCreate />,
     },
     {
-        path: "/aplicacoes-financeiras/edit", 
+        path: "/aplicacoesFinanceiras/edit", 
         element: <AplicacoesFinanceirasEdit />,
     },
 ])

@@ -26,7 +26,7 @@ import Banco_logo from '../../images/Banco_logo.png';
 export default function FormLogin() {
     
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [senha, setSenha] = useState('')
     const [load, setLoad] = useState(false)
     const [view, setView] = useState(false)
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function FormLogin() {
 
     function Authenticate() {
 
-        const user = { email: email , password: password }
+        const user = { email: email , senha: senha }
 
         setView(false)
         setLoad(true) 
@@ -48,7 +48,7 @@ export default function FormLogin() {
                 setDataUser(load.user)
                 setToken(load.token.value)
                 setPermissions(load.permissions)
-                navigate('/cursos')
+                navigate('/clientes')
             })
             .catch(function(error) {
                 setView(true)
@@ -91,10 +91,10 @@ export default function FormLogin() {
                     
                         <Label>Senha</Label>
                         <InputPassword 
-                            id="password" 
-                            name="password" 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            id="senha" 
+                            name="senha" 
+                            value={senha}
+                            onChange={(e) => setSenha(e.target.value)}
                         />
                         
                         {

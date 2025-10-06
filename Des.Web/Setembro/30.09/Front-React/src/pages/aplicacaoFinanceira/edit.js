@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, Modal, Button, Alert } from 'react-bootstrap';
 import { OrbitProgress } from "react-loading-indicators";
 import NavigationBar from '../../components/navigationbar';
-import { Label, Input, Select } from "./style";
+import { Label, Input, Select, Submit } from "./style";
 import { Client } from '../../api/client';
 import { getPermissions } from '../../service/PermissionService';
 import { getDataUser } from '../../service/UserService';
@@ -165,16 +165,8 @@ export default function EditAplicacaoFinanceira() {
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
-                        <Button variant="secondary" onClick={() => navigate('/aplicacoes-financeiras')}>
-                            Voltar
-                        </Button>
-                        <Button 
-                            variant="primary" 
-                            onClick={updateAplicacaoFinanceira}
-                            disabled={!contaEncontrada || !tipo || !valor}
-                        >
-                            Alterar
-                        </Button>
+                         <Submit  value="Voltar" onClick={() => navigate('/aplicacoesFinanceiras')} />
+                         <Submit value="Cadastrar" onClick={updateAplicacaoFinanceira} disabled={!contaEncontrada || !tipo || !valor} />
                     </div>
                   </Container>
             }

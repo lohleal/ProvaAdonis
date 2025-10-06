@@ -46,7 +46,7 @@ export default function EditContaCorrente() {
             .catch(console.error);
     }
 
-    const handleClose = () => { setShow(false); navigate('/contas-correntes'); }
+    const handleClose = () => { setShow(false); navigate('/contasCorrentes'); }
 
     function verifyPermission() {
         if(!dataUser) navigate('/login');
@@ -112,7 +112,7 @@ export default function EditContaCorrente() {
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
-                        <Submit value="Voltar" onClick={() => navigate('/contas-correntes')} />
+                        <Submit value="Voltar" onClick={() => navigate('/contasCorrentes')} />
                         <Submit value="Alterar" onClick={updateContaCorrente} />
                     </div>
                   </Container>

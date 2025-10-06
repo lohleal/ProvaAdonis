@@ -83,7 +83,7 @@ export default function CreateContaCorrente() {
                                     onClick={gerarNumeroConta}
                                     style={{ whiteSpace: 'nowrap' }}
                                 >
-                                    🔄 Gerar
+                                    Gerar
                                 </button>
                             </div>
                             <small className="text-muted">Número gerado automaticamente</small>
@@ -122,7 +122,7 @@ export default function CreateContaCorrente() {
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
-                        <Submit value="Voltar" onClick={() => navigate('/contas-correntes')} />
+                        <Submit value="Voltar" onClick={() => navigate('/contasCorrentes')} />
                         <Submit value="Cadastrar" onClick={sendData} />
                     </div>
                 </Container>
