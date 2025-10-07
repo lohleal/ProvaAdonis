@@ -56,20 +56,15 @@ router.group(() => {
 
 // Rotas protegidas por autenticação
 router.group(() => {
-  // Cliente
   const ClienteController = () => import('#controllers/cliente_controller')
   router.resource('clientes', ClienteController)
 
-  // Conta Corrente  
   const ContaCorrenteController = () => import('#controllers/conta_corrente_controller')
-  router.resource('contas-correntes', ContaCorrenteController)
+  router.resource('contasCorrentes', ContaCorrenteController)
 
-  // Movimentacao
   const MovimentacaoController = () => import('#controllers/movimentacao_controller')
   router.resource('movimentacoes', MovimentacaoController)
 
-  // AplicacaoFinanceira
   const AplicacaoFinanceiraController = () => import('#controllers/aplicacao_financeira_controller')
-  router.resource('aplicacoes-financeiras', AplicacaoFinanceiraController)
-
+  router.resource('aplicacoesFinanceiras', AplicacaoFinanceiraController)
 }).use([middleware.auth()])

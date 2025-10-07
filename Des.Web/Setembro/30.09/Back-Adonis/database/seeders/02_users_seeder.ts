@@ -13,14 +13,14 @@ export default class UserSeeder extends BaseSeeder {
 
     // Criar clientes (usuários)
     await User.create({
-      nome_completo: 'Cliente 1',
+      nome_completo: 'Ana',
       email: 'cliente1@teste.com',
       senha: '123456',
       papel_id: 2, 
     })
 
     await User.create({
-      nome_completo: 'Cliente 2', 
+      nome_completo: 'Helo', 
       email: 'cliente2@teste.com',
       senha: '123456',
       papel_id: 2, 

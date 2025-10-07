@@ -1,4 +1,29 @@
 export const permissions = [
+  {
+    listCliente: false,
+    viewCliente: false,
+    createCliente: false,
+    editCliente: false,
+    deleteCliente: false,
+
+    listContaCorrente: false,
+    viewContaCorrente: false,
+    createContaCorrente: false,
+    editContaCorrente: false,
+    deleteContaCorrente: false,
+
+    listMovimentacao: false,
+    viewMovimentacao: false,
+    createMovimentacao: false,
+    editMovimentacao: false,
+    deleteMovimentacao: false,
+
+    listAplicacaoFinanceira: false,
+    viewAplicacaoFinanceira: false,
+    createAplicacaoFinanceira: false,
+    editAplicacaoFinanceira: false,
+    deleteAplicacaoFinanceira: false,
+  },
   // Papel 1: Gerente
   {
     listCliente: true,

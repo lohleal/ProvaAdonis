@@ -78,7 +78,7 @@ export default function EditAplicacaoFinanceira() {
             .catch(console.error);
     }
 
-    const handleClose = () => { setShow(false); navigate('/aplicacoes-financeiras'); }
+    const handleClose = () => { setShow(false); navigate('/aplicacoesFinanceiras'); }
 
     function verifyPermission() {
         if(!dataUser) navigate('/login');
@@ -108,7 +108,7 @@ export default function EditAplicacaoFinanceira() {
             <NavigationBar />
             {load 
                 ? <Container className="d-flex justify-content-center mt-5">
-                    <OrbitProgress variant="spokes" color="#32cd32" size="medium" />
+                    <OrbitProgress variant="spokes" color="#582770" size="medium" />
                   </Container>
                 : <Container className='mt-2'>
                     <div className="row">
@@ -166,7 +166,7 @@ export default function EditAplicacaoFinanceira() {
 
                     <div className="mt-3 d-flex gap-2">
                          <Submit  value="Voltar" onClick={() => navigate('/aplicacoesFinanceiras')} />
-                         <Submit value="Cadastrar" onClick={updateAplicacaoFinanceira} disabled={!contaEncontrada || !tipo || !valor} />
+                         <Submit value="Alterar" onClick={updateAplicacaoFinanceira} disabled={!contaEncontrada || !tipo || !valor} />
                     </div>
                   </Container>
             }

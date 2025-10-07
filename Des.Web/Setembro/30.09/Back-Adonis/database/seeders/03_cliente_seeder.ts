@@ -4,7 +4,7 @@ import Cliente from '#models/cliente'
 export default class ClienteSeeder extends BaseSeeder {
   public async run() {
     await Cliente.create({
-      nome_completo: 'Cliente 1',
+      nome_completo: 'Ana',
       email: 'cliente1@teste.com',
       senha: '123456',
       cpf: '12345678901',
@@ -15,7 +15,7 @@ export default class ClienteSeeder extends BaseSeeder {
     })
     
     await Cliente.create({
-      nome_completo: 'Cliente 2',
+      nome_completo: 'Helo',
       email: 'cliente2@teste.com',
       senha: '123456',
       cpf: '98765432100',

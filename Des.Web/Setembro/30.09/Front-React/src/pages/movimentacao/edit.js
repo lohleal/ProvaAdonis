@@ -157,7 +157,7 @@ export default function EditMovimentacao() {
             <NavigationBar />
             {load 
                 ? <Container className="d-flex justify-content-center mt-5">
-                    <OrbitProgress variant="spokes" color="#32cd32" size="medium" />
+                    <OrbitProgress variant="spokes" color="#582770" size="medium" />
                   </Container>
                 : <Container className='mt-2'>
                     <div className="row">
@@ -253,7 +253,7 @@ export default function EditMovimentacao() {
 
                     <div className="mt-3 d-flex gap-2">
                     <Submit value="Voltar" onClick={() => navigate('/movimentacoes')} />
-                    <Submit value="Cadastrar" onClick={updateMovimentacao} disabled={!tipo || !valor} />
+                    <Submit value="Alterar" onClick={updateMovimentacao} disabled={!tipo || !valor} />
                     </div>
                   </Container>
             }
