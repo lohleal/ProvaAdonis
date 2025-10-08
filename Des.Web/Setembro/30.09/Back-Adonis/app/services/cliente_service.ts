@@ -1,36 +1,32 @@
-import Cliente from '#models/cliente'
+import Cliente from "#models/cliente"
 
 export default class ClienteService {
   static async listarClientes() {
-    return Cliente.all()
+    const clientes = await Cliente.all()
+    return clientes.map(c => c.toJSON())
   }
 
   static async buscarCliente(id: number) {
-    return await Cliente.findOrFail(id)
+    const cliente = await Cliente.findOrFail(id)
+    return cliente.toJSON()
   }
 
   static async criarCliente(payload: any) {
-    return await Cliente.create(payload)
+    const cliente = await Cliente.create(payload)
+    return cliente.toJSON()
   }
 
   static async atualizarCliente(id: number, payload: any) {
     const cliente = await Cliente.findOrFail(id)
     cliente.merge(payload)
     await cliente.save()
-    return cliente
+    return cliente.toJSON()
   }
 
   static async deletarCliente(id: number) {
     const cliente = await Cliente.findOrFail(id)
+    const data = cliente.toJSON()
     await cliente.delete()
-    return cliente
-  }
-
-  static async buscarPorEmail(email: string) {
-    return await Cliente.query().where('email', email).first()
-  }
-
-  static async buscarPorCPF(cpf: string) {
-    return await Cliente.query().where('cpf', cpf).first()
+    return data
   }
 }

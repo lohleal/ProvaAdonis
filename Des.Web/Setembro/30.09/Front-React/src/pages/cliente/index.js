@@ -20,9 +20,10 @@ export default function HomeCliente() {
         setTimeout(() => {
             Client.get('clientes')
                 .then(res => {
+                    console.log(res.data.data)
                     const clientes = res.data.data.map(c => ({
                         ...c,
-                        endereco_completo: `${c.rua}, ${c.numero_casa} - ${c.cidade}/${c.estado}`
+                        endereco_completo: `${c.rua}, ${c.numeroCasa} - ${c.cidade}/${c.estado}`
                     }));
                     setData(clientes);
                 })
@@ -54,7 +55,7 @@ export default function HomeCliente() {
                         rows={['Nome', 'Email', 'CPF', 'Endereço', 'Ações']}
                         hide={[false, false, false, false, false]}
                         data={data}
-                        keys={['nome_completo', 'email', 'cpf', 'endereco_completo']} 
+                        keys={['nomeCompleto', 'email', 'cpf', 'endereco_completo']} 
                         resource='clientes'
                         crud={['viewCliente', 'createCliente', 'editCliente', 'deleteCliente']}
                     />

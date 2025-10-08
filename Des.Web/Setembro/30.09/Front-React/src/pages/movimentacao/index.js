@@ -30,9 +30,9 @@ export default function IndexMovimentacao() {
                                       m.tipo === 'saque' ? 'Saque' : 
                                       m.tipo === 'transferencia' ? 'Transferência' : 
                                       'Aplicação',
-                        data_formatada: new Date(m.data_movimentacao).toLocaleDateString('pt-BR'),
-                        conta_origem: m.conta_origem_id ? `${m.conta_origem?.numero_conta} - ${m.conta_origem?.cliente?.nome_completo}` : '—',
-                        conta_destino: m.conta_destino_id ? `${m.conta_destino?.numero_conta} - ${m.conta_destino?.cliente?.nome_completo}` : '—'
+                        data_formatada: new Date(m.dataMovimentacao).toLocaleDateString('pt-BR'),
+                        conta_origem: m.contaOrigemId ? `${m.contaOrigem?.numeroConta} - ${m.contaOrigem?.cliente?.nomeCompleto}` : '—',
+                        conta_destino: m.contaDestinoId ? `${m.contaDestino?.numeroConta} - ${m.contaDestino?.cliente?.nomeCompleto}` : '—'
                     }));
                     setData(movimentacoes);
                 })

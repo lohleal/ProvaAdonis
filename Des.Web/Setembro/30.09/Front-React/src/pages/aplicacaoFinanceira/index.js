@@ -30,7 +30,7 @@ export default function IndexAplicacaoFinanceira() {
                                       a.tipo === 'titulos_governo' ? 'Títulos do Governo' : 
                                       'Ações',
                         status_formatado: a.status === 'ativa' ? 'Ativa' : 'Resgatada',
-                        conta_corrente_info: a.conta_corrente ? `${a.conta_corrente.numero_conta} - ${a.conta_corrente.cliente?.nome_completo}` : '—',
+                        conta_corrente_info: a.contaCorrente ? `${a.contaCorrente.numeroConta} - ${a.contaCorrente.cliente?.nomeCompleto}` : '—',
                         data_criacao: new Date(a.createdAt).toLocaleDateString('pt-BR')
                     }));
                     setData(aplicacoes);

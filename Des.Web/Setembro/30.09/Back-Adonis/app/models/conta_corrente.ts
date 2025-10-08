@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, hasMany,  } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo, hasMany } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Cliente from './cliente.js'
 import Movimentacao from './movimentacao.js'
@@ -7,21 +7,21 @@ import AplicacaoFinanceira from './aplicacao_financeira.js'
 
 export default class ContaCorrente extends BaseModel {
   static table = 'contas_correntes'
-  
+
   @column({ isPrimary: true })
   declare id: number
-
-  @column()
+  
+  @column({ columnName: 'numero_conta', serializeAs: 'numeroConta' })
   declare numero_conta: string
-
-  @column()
+  
+  @column({ columnName: 'numero_agencia', serializeAs: 'numeroAgencia' })
   declare numero_agencia: string
 
   @column()
   declare saldo: number
 
-  @column()
-  declare cliente_id: number
+  @column({ columnName: 'cliente_id' })
+  declare clienteId: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -29,7 +29,7 @@ export default class ContaCorrente extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @belongsTo(() => Cliente)
+  @belongsTo(() => Cliente, { foreignKey: 'clienteId'})
   declare cliente: BelongsTo<typeof Cliente>
 
   @hasMany(() => Movimentacao, { foreignKey: 'conta_origem_id' })
