@@ -5,7 +5,7 @@ import ContaCorrente from './conta_corrente.js'
 
 export default class Movimentacao extends BaseModel {
   static table = 'movimentacoes'
-  
+
   @column({ isPrimary: true })
   declare id: number
 
@@ -15,17 +15,17 @@ export default class Movimentacao extends BaseModel {
   @column()
   declare valor: number
 
-  @column()
-  declare conta_origem_id: number | null
+  @column({ columnName: 'conta_origem_id' })
+  declare contaOrigemId: number | null
 
-  @column()
-  declare conta_destino_id: number | null
+  @column({ columnName: 'conta_destino_id' })
+  declare contaDestinoId: number | null
 
   @column()
   declare descricao: string | null
 
-  @column.dateTime()
-  declare data_movimentacao: DateTime
+  @column.dateTime({ columnName: 'data_movimentacao' })
+  declare dataMovimentacao: DateTime
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -33,9 +33,9 @@ export default class Movimentacao extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 
-  @belongsTo(() => ContaCorrente, { foreignKey: 'conta_origem_id' })
+  @belongsTo(() => ContaCorrente, { foreignKey: 'contaOrigemId' })
   declare contaOrigem: BelongsTo<typeof ContaCorrente>
 
-  @belongsTo(() => ContaCorrente, { foreignKey: 'conta_destino_id' })
+  @belongsTo(() => ContaCorrente, { foreignKey: 'contaDestinoId' })
   declare contaDestino: BelongsTo<typeof ContaCorrente>
 }

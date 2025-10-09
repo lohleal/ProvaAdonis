@@ -9,8 +9,8 @@ export default class ContaCorrenteSeeder extends BaseSeeder {
 
     for (let i = 0; i < clientes.length; i++) {
       await ContaCorrente.create({
-        numero_conta: `1000${i + 1}`,
-        numero_agencia: '0001',
+        numeroConta: `1000${i + 1}`,
+        numeroAgencia: '0001',
         saldo: 1000, // saldo inicial
         clienteId: clientes[i].id,
       })

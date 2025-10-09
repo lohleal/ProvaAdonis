@@ -48,11 +48,11 @@ export default function CreateContaCorrente() {
 
     function sendData() {
         const contaCorrente = {
-            numero_conta: numeroConta,
-            numero_agencia: numeroAgencia,
+            numeroConta,
+            numeroAgencia,
             saldo: saldo ? parseFloat(saldo) : 0,
-            cliente_id: clienteId
-        };
+            clienteId
+    };
 
         Client.post('contasCorrentes', contaCorrente)
             .then(() => navigate('/contasCorrentes'))

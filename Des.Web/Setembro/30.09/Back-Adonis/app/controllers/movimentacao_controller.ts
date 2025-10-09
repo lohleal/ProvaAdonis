@@ -14,25 +14,10 @@ export default class MovimentacoesController {
       }
 
       const movimentacoes = await MovimentacaoService.listarMovimentacao()
-      return response.status(200).json({ message: 'OK', data: movimentacoes })
+      return response.ok({ message: 'OK', data: movimentacoes })
     } catch (error) {
       logger.error(error)
-      return response.status(500).json({ message: 'ERROR' })
-    }
-  }
-
-  async create({ auth, bouncer, response }: HttpContext) {
-    try {
-      await auth.getUserOrFail()
-
-      if (await bouncer.with(MovimentacaoPolicy).denies('create')) {
-        return response.forbidden({ message: 'Você não tem permissão para criar movimentação' })
-      }
-
-      return response.status(200).json({ message: 'OK', data: [] })
-    } catch (error) {
-      logger.error(error)
-      return response.status(500).json({ message: 'ERROR' })
+      return response.internalServerError({ message: 'ERROR' })
     }
   }
 
@@ -46,17 +31,13 @@ export default class MovimentacoesController {
       }
 
       const movimentacao = await MovimentacaoService.criarMovimentacao(payload)
-      return response.status(201).json({ message: 'OK', data: movimentacao })
+      return response.created({ message: 'OK', data: movimentacao })
     } catch (error) {
       logger.error(error)
-      
-      if (error.message === 'Saldo insuficiente') {
-        return response.status(400).json({
-          message: 'Saldo insuficiente para realizar a operação',
-        })
+      if (error.message?.includes('Saldo insuficiente')) {
+        return response.badRequest({ message: 'Saldo insuficiente para realizar a operação' })
       }
-      
-      return response.status(500).json({ message: 'ERROR' })
+      return response.internalServerError({ message: 'ERROR' })
     }
   }
 
@@ -65,29 +46,14 @@ export default class MovimentacoesController {
       await auth.getUserOrFail()
 
       if (await bouncer.with(MovimentacaoPolicy).denies('view')) {
-        return response.forbidden({ message: 'Você não tem permissão para ver movimentação' })
+        return response.forbidden({ message: 'Você não tem permissão para ver movimentações' })
       }
 
       const movimentacao = await MovimentacaoService.buscarMovimentacao(params.id)
-      return response.status(200).json({ message: 'OK', data: movimentacao })
+      return response.ok({ message: 'OK', data: movimentacao })
     } catch (error) {
       logger.error(error)
-      return response.status(500).json({ message: 'ERROR' })
-    }
-  }
-
-  async edit({ auth, bouncer, response }: HttpContext) {
-    try {
-      await auth.getUserOrFail()
-
-      if (await bouncer.with(MovimentacaoPolicy).denies('edit')) {
-        return response.forbidden({ message: 'Você não tem permissão para alterar movimentação' })
-      }
-
-      return response.status(200).json({ message: 'OK', data: [] })
-    } catch (error) {
-      logger.error(error)
-      return response.status(500).json({ message: 'ERROR' })
+      return response.internalServerError({ message: 'ERROR' })
     }
   }
 
@@ -97,14 +63,17 @@ export default class MovimentacoesController {
       await auth.getUserOrFail()
 
       if (await bouncer.with(MovimentacaoPolicy).denies('edit')) {
-        return response.forbidden({ message: 'Você não tem permissão para alterar movimentação' })
+        return response.forbidden({ message: 'Você não tem permissão para editar movimentações' })
       }
 
       const movimentacao = await MovimentacaoService.atualizarMovimentacao(params.id, payload)
-      return response.status(200).json({ message: 'OK', data: movimentacao })
+      return response.ok({ message: 'OK', data: movimentacao })
     } catch (error) {
       logger.error(error)
-      return response.status(500).json({ message: 'ERROR' })
+      if (error.message?.includes('Saldo insuficiente')) {
+        return response.badRequest({ message: 'Saldo insuficiente para realizar a operação' })
+      }
+      return response.internalServerError({ message: 'ERROR' })
     }
   }
 
@@ -113,14 +82,14 @@ export default class MovimentacoesController {
       await auth.getUserOrFail()
 
       if (await bouncer.with(MovimentacaoPolicy).denies('delete')) {
-        return response.forbidden({ message: 'Você não tem permissão para remover movimentação' })
+        return response.forbidden({ message: 'Você não tem permissão para remover movimentações' })
       }
 
       await MovimentacaoService.deletarMovimentacao(params.id)
-      return response.status(200).json({ message: 'OK' })
+      return response.ok({ message: 'OK' })
     } catch (error) {
       logger.error(error)
-      return response.status(500).json({ message: 'ERROR' })
+      return response.internalServerError({ message: 'ERROR' })
     }
   }
 }

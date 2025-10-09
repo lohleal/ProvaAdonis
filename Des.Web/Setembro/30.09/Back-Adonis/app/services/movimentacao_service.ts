@@ -17,24 +17,27 @@ export default class MovimentacaoService {
   }
 
   static async criarMovimentacao(payload: any) {
-    const { tipo, valor, conta_origem_id, conta_destino_id } = payload
+    const { tipo, valor, contaOrigemId, contaDestinoId } = payload
 
     const trx = await Movimentacao.transaction()
     try {
+      // Débito da conta de origem
       if (tipo === 'saque' || tipo === 'transferencia' || tipo === 'aplicacao') {
-        const contaOrigem = await ContaCorrente.findOrFail(conta_origem_id, { client: trx })
+        const contaOrigem = await ContaCorrente.findOrFail(contaOrigemId, { client: trx })
         if (Number(contaOrigem.saldo) < Number(valor)) throw new Error('Saldo insuficiente.')
         contaOrigem.saldo -= Number(valor)
         await contaOrigem.useTransaction(trx).save()
       }
 
+      // Crédito da conta destino
       if (tipo === 'deposito' || tipo === 'transferencia') {
-        if (!conta_destino_id) throw new Error('Conta destino obrigatória.')
-        const contaDestino = await ContaCorrente.findOrFail(conta_destino_id, { client: trx })
+        if (!contaDestinoId) throw new Error('Conta destino obrigatória.')
+        const contaDestino = await ContaCorrente.findOrFail(contaDestinoId, { client: trx })
         contaDestino.saldo += Number(valor)
         await contaDestino.useTransaction(trx).save()
       }
 
+      // Cria a movimentação
       const movimentacao = await Movimentacao.create(payload, { client: trx })
       await trx.commit()
 
@@ -52,31 +55,31 @@ export default class MovimentacaoService {
     const trx = await Movimentacao.transaction()
     try {
       const mov = await Movimentacao.findOrFail(id, { client: trx })
-      const { tipo, valor, conta_origem_id, conta_destino_id } = payload
+      const { tipo, valor, contaOrigemId, contaDestinoId } = payload
 
       // Reverte saldo antigo
       if (mov.tipo === 'saque' || mov.tipo === 'transferencia' || mov.tipo === 'aplicacao') {
-        const contaOrigem = await ContaCorrente.findOrFail(mov.conta_origem_id, { client: trx })
+        const contaOrigem = await ContaCorrente.findOrFail(mov.contaOrigemId, { client: trx })
         contaOrigem.saldo += Number(mov.valor)
         await contaOrigem.useTransaction(trx).save()
       }
 
       if (mov.tipo === 'deposito' || mov.tipo === 'transferencia') {
-        const contaDestino = await ContaCorrente.findOrFail(mov.conta_destino_id, { client: trx })
+        const contaDestino = await ContaCorrente.findOrFail(mov.contaDestinoId, { client: trx })
         contaDestino.saldo -= Number(mov.valor)
         await contaDestino.useTransaction(trx).save()
       }
 
       // Aplica nova movimentação
       if (tipo === 'saque' || tipo === 'transferencia' || tipo === 'aplicacao') {
-        const contaOrigem = await ContaCorrente.findOrFail(conta_origem_id, { client: trx })
+        const contaOrigem = await ContaCorrente.findOrFail(contaOrigemId, { client: trx })
         if (Number(contaOrigem.saldo) < Number(valor)) throw new Error('Saldo insuficiente.')
         contaOrigem.saldo -= Number(valor)
         await contaOrigem.useTransaction(trx).save()
       }
 
       if (tipo === 'deposito' || tipo === 'transferencia') {
-        const contaDestino = await ContaCorrente.findOrFail(conta_destino_id, { client: trx })
+        const contaDestino = await ContaCorrente.findOrFail(contaDestinoId, { client: trx })
         contaDestino.saldo += Number(valor)
         await contaDestino.useTransaction(trx).save()
       }
@@ -102,13 +105,13 @@ export default class MovimentacaoService {
 
       // Reverte saldo
       if (mov.tipo === 'saque' || mov.tipo === 'transferencia' || mov.tipo === 'aplicacao') {
-        const contaOrigem = await ContaCorrente.findOrFail(mov.conta_origem_id, { client: trx })
+        const contaOrigem = await ContaCorrente.findOrFail(mov.contaOrigemId, { client: trx })
         contaOrigem.saldo += Number(mov.valor)
         await contaOrigem.useTransaction(trx).save()
       }
 
       if (mov.tipo === 'deposito' || mov.tipo === 'transferencia') {
-        const contaDestino = await ContaCorrente.findOrFail(mov.conta_destino_id, { client: trx })
+        const contaDestino = await ContaCorrente.findOrFail(mov.contaDestinoId, { client: trx })
         contaDestino.saldo -= Number(mov.valor)
         await contaDestino.useTransaction(trx).save()
       }

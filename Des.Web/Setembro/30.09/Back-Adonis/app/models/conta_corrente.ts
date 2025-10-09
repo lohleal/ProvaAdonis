@@ -11,11 +11,11 @@ export default class ContaCorrente extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   
-  @column({ columnName: 'numero_conta', serializeAs: 'numeroConta' })
-  declare numero_conta: string
+  @column({ columnName: 'numero_conta' })
+  declare numeroConta: string
   
-  @column({ columnName: 'numero_agencia', serializeAs: 'numeroAgencia' })
-  declare numero_agencia: string
+  @column({ columnName: 'numero_agencia' })
+  declare numeroAgencia: string
 
   @column()
   declare saldo: number
