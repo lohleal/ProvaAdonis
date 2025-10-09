@@ -38,6 +38,6 @@ export default class ContaCorrente extends BaseModel {
   @hasMany(() => Movimentacao, { foreignKey: 'conta_destino_id' })
   declare movimentacoesDestino: HasMany<typeof Movimentacao>
 
-  @hasMany(() => AplicacaoFinanceira)
+  @hasMany(() => AplicacaoFinanceira, { foreignKey: 'conta_corrente_id' })
   declare aplicacoes: HasMany<typeof AplicacaoFinanceira>
 }

@@ -26,7 +26,7 @@ export default class ClienteService {
   static async deletarCliente(id: number) {
     const cliente = await Cliente.findOrFail(id)
     const data = cliente.toJSON()
-    await cliente.delete()
+    await cliente.delete() 
     return data
   }
 }

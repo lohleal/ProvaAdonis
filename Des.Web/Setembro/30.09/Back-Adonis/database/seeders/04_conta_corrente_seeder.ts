@@ -12,7 +12,7 @@ export default class ContaCorrenteSeeder extends BaseSeeder {
         numero_conta: `1000${i + 1}`,
         numero_agencia: '0001',
         saldo: 1000, // saldo inicial
-        cliente_id: clientes[i].id,
+        clienteId: clientes[i].id,
       })
     }
   }

@@ -12,10 +12,10 @@ export default function EditContaCorrente() {
     const location = useLocation();
     const conta = location.state?.item;
 
-    const [numeroConta, setNumeroConta] = useState(conta.numero_conta || '');
-    const [numeroAgencia, setNumeroAgencia] = useState(conta.numero_agencia || '');
+    const [numeroConta, setNumeroConta] = useState(conta.numeroConta || '');
+    const [numeroAgencia, setNumeroAgencia] = useState(conta.numeroAgencia || '');
     const [saldo, setSaldo] = useState(conta.saldo || '');
-    const [clienteId, setClienteId] = useState(conta.cliente_id || '');
+    const [clienteId, setClienteId] = useState(conta.clienteId || '');
     const [clientes, setClientes] = useState([]);
     const [load, setLoad] = useState(true);
     const [show, setShow] = useState(false);

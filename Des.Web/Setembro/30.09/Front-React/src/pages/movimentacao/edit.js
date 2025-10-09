@@ -14,12 +14,12 @@ export default function EditMovimentacao() {
 
     const [tipo, setTipo] = useState(movimentacao.tipo || '');
     const [valor, setValor] = useState(movimentacao.valor || '');
-    const [numeroContaOrigem, setNumeroContaOrigem] = useState(movimentacao.conta_origem?.numero_conta || '');
-    const [numeroContaDestino, setNumeroContaDestino] = useState(movimentacao.conta_destino?.numero_conta || '');
+    const [numeroContaOrigem, setNumeroContaOrigem] = useState(movimentacao.contaOrigem?.numeroConta || '');
+    const [numeroContaDestino, setNumeroContaDestino] = useState(movimentacao.contaDestino?.numeroConta || '');
     const [descricao, setDescricao] = useState(movimentacao.descricao || '');
-    const [dataMovimentacao, setDataMovimentacao] = useState(movimentacao.data_movimentacao?.split('T')[0] || '');
-    const [contaOrigemEncontrada, setContaOrigemEncontrada] = useState(movimentacao.conta_origem || null);
-    const [contaDestinoEncontrada, setContaDestinoEncontrada] = useState(movimentacao.conta_destino || null);
+    const [dataMovimentacao, setDataMovimentacao] = useState(movimentacao.dataMovimentacao?.split('T')[0] || '');
+    const [contaOrigemEncontrada, setContaOrigemEncontrada] = useState(movimentacao.contaOrigem || null);
+    const [contaDestinoEncontrada, setContaDestinoEncontrada] = useState(movimentacao.contaDestino || null);
     const [erroOrigem, setErroOrigem] = useState('');
     const [erroDestino, setErroDestino] = useState('');
     const [load, setLoad] = useState(true);
@@ -49,7 +49,7 @@ export default function EditMovimentacao() {
         }
 
         try {
-            const response = await Client.get(`contasCorrentes?numero_conta=${numeroConta}`);
+            const response = await Client.get(`contasCorrentes?numeroConta=${numeroConta}`);
             if (response.data.data && response.data.data.length > 0) {
                 const conta = response.data.data[0];
                 if (tipoConta === 'origem') {
@@ -195,7 +195,7 @@ export default function EditMovimentacao() {
                                 />
                                 {contaOrigemEncontrada && (
                                     <Alert variant="success" className="mt-2 small py-2">
-                                        ✅ Conta origem: <strong>{contaOrigemEncontrada.numero_conta}</strong> - {contaOrigemEncontrada.cliente?.nome_completo}
+                                        ✅ Conta origem: <strong>{contaOrigemEncontrada.numeroConta}</strong> - {contaOrigemEncontrada.cliente?.nomeCompleto}
                                     </Alert>
                                 )}
                                 {erroOrigem && (
@@ -219,7 +219,7 @@ export default function EditMovimentacao() {
                                 />
                                 {contaDestinoEncontrada && (
                                     <Alert variant="success" className="mt-2 small py-2">
-                                        ✅ Conta destino: <strong>{contaDestinoEncontrada.numero_conta}</strong> - {contaDestinoEncontrada.cliente?.nome_completo}
+                                        ✅ Conta destino: <strong>{contaDestinoEncontrada.numeroConta}</strong> - {contaDestinoEncontrada.cliente?.nomeCompleto}
                                     </Alert>
                                 )}
                                 {erroDestino && (

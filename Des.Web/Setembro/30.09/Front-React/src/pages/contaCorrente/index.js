@@ -25,13 +25,14 @@ export default function IndexContaCorrente() {
             style: 'currency',
             currency: 'BRL'
           }).format(c.saldo),
-          cliente_nome: c.cliente?.nomeCompleto || '—'
+          cliente_cpf: c.cliente?.cpf || '—'
         }));
         setData(contas);
       })
       .catch(console.error)
       .finally(() => setLoad(false));
   }
+  
 
   function verifyPermission() {
     if (!dataUser) navigate('/login');
@@ -57,7 +58,7 @@ export default function IndexContaCorrente() {
             rows={['Nº Conta', 'Agência', 'Saldo', 'Cliente', 'Ações']}
             hide={[false, false, false, false, false]}
             data={data}
-            keys={['numeroConta', 'numeroAgencia', 'saldo_formatado', 'cliente_nome']}
+            keys={['numeroConta', 'numeroAgencia', 'saldo_formatado', 'cliente_cpf']}
             resource='contas-correntes'
             crud={['viewContaCorrente', 'createContaCorrente', 'editContaCorrente', 'deleteContaCorrente']}
           />

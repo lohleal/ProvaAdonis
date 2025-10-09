@@ -12,14 +12,14 @@ export default function EditCliente() {
     const location = useLocation();
     const cliente = location.state?.item;
 
-    const [nomeCompleto, setNomeCompleto] = useState(cliente.nome_completo || '');
+    const [nomeCompleto, setNomeCompleto] = useState(cliente.nomeCompleto || '');
     const [email, setEmail] = useState(cliente.email || '');
     const [senha, setSenha] = useState(''); 
     const [cpf, setCpf] = useState(cliente.cpf || '');
     const [cidade, setCidade] = useState(cliente.cidade || '');
     const [estado, setEstado] = useState(cliente.estado || '');
     const [rua, setRua] = useState(cliente.rua || '');
-    const [numeroCasa, setNumeroCasa] = useState(cliente.numero_casa || '');
+    const [numeroCasa, setNumeroCasa] = useState(cliente.numeroCasa || '');
     const [load, setLoad] = useState(true);
     const [show, setShow] = useState(false);
     const navigate = useNavigate();

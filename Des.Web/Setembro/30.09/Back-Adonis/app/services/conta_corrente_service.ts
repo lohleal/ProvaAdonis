@@ -26,7 +26,10 @@ export default class ContaCorrenteService {
   }
 
   static async atualizarConta(id: number, payload: any) {
-    const conta = await ContaCorrente.findOrFail(id)
+    const conta = await ContaCorrente.query()
+      .where('id', id)
+      .preload('cliente')
+      .firstOrFail()
     conta.merge(payload)
     await conta.save()
     await conta.load('cliente')
@@ -35,8 +38,8 @@ export default class ContaCorrenteService {
 
   static async deletarConta(id: number) {
     const conta = await ContaCorrente.findOrFail(id)
-    const contaData = conta.toJSON()
+    const data = conta.toJSON()
     await conta.delete()
-    return contaData
+    return data
   }
 }

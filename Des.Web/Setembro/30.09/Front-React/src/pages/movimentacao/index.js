@@ -20,6 +20,7 @@ export default function IndexMovimentacao() {
         setTimeout(() => {
             Client.get('movimentacoes')
                 .then(res => {
+                    console.log(res.data.data); // Verifique o formato dos objetos
                     const movimentacoes = res.data.data.map(m => ({
                         ...m,
                         valor_formatado: new Intl.NumberFormat('pt-BR', {
@@ -27,19 +28,19 @@ export default function IndexMovimentacao() {
                             currency: 'BRL'
                         }).format(m.valor),
                         tipo_formatado: m.tipo === 'deposito' ? 'Depósito' : 
-                                      m.tipo === 'saque' ? 'Saque' : 
-                                      m.tipo === 'transferencia' ? 'Transferência' : 
-                                      'Aplicação',
+                                        m.tipo === 'saque' ? 'Saque' : 
+                                        m.tipo === 'transferencia' ? 'Transferência' : 
+                                        'Aplicação',
                         data_formatada: new Date(m.dataMovimentacao).toLocaleDateString('pt-BR'),
-                        conta_origem: m.contaOrigemId ? `${m.contaOrigem?.numeroConta} - ${m.contaOrigem?.cliente?.nomeCompleto}` : '—',
-                        conta_destino: m.contaDestinoId ? `${m.contaDestino?.numeroConta} - ${m.contaDestino?.cliente?.nomeCompleto}` : '—'
+                        conta_origem: m.contaOrigem ? `${m.contaOrigem.numeroConta} - ${m.contaOrigem.cliente?.cpf || '—'}` : '—',
+                        conta_destino: m.contaDestino ? `${m.contaDestino.numeroConta} - ${m.contaDestino.cliente?.cpf || '—'}` : '—'
                     }));
                     setData(movimentacoes);
                 })
                 .catch(console.error)
                 .finally(() => setLoad(false));
         }, 500);
-    }
+    }    
 
     function verifyPermission() {
         if(!dataUser) navigate('/login');

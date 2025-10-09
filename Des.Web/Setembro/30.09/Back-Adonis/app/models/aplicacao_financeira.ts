@@ -21,8 +21,8 @@ export default class AplicacaoFinanceira extends BaseModel {
   @column()
   declare conta_corrente_id: number
 
-  @belongsTo(() => ContaCorrente)
-  declare conta_corrente: BelongsTo<typeof ContaCorrente>
+  @belongsTo(() => ContaCorrente, { foreignKey: 'conta_corrente_id' })
+  declare contaCorrente: BelongsTo<typeof ContaCorrente>  
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

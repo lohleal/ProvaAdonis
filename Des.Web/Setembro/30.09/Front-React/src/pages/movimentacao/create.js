@@ -142,7 +142,7 @@ export default function CreateMovimentacao() {
             conta_origem_id: tipo === 'deposito' ? null : contaOrigemEncontrada?.id,
             conta_destino_id: tipo === 'saque' ? null : contaDestinoEncontrada?.id,
             descricao,
-            data_movimentacao: dataMovimentacao
+            data_movimentacao: new Date(dataMovimentacao).toISOString() 
         };
 
         Client.post('movimentacoes', movimentacao)
@@ -197,7 +197,7 @@ export default function CreateMovimentacao() {
                                 />
                                 {contaOrigemEncontrada && (
                                     <Alert variant="success" className="mt-2 small py-2">
-                                        ✅ Conta origem: <strong>{contaOrigemEncontrada.numero_conta}</strong> - {contaOrigemEncontrada.cliente?.nome_completo}
+                                        ✅ Conta origem: <strong>{contaOrigemEncontrada.numeroConta}</strong> - {contaOrigemEncontrada.cliente?.nomeCompleto}
                                         <br />
                                         Saldo: <strong>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaOrigemEncontrada.saldo)}</strong>
                                     </Alert>
@@ -223,7 +223,7 @@ export default function CreateMovimentacao() {
                                 />
                                 {contaDestinoEncontrada && (
                                     <Alert variant="success" className="mt-2 small py-2">
-                                        ✅ Conta destino: <strong>{contaDestinoEncontrada.numero_conta}</strong> - {contaDestinoEncontrada.cliente?.nome_completo}
+                                        ✅ Conta destino: <strong>{contaDestinoEncontrada.numeroConta}</strong> - {contaDestinoEncontrada.cliente?.nomeCompleto}
                                     </Alert>
                                 )}
                                 {erroDestino && (
