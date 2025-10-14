@@ -145,7 +145,7 @@ export default function EditAplicacaoFinanceira() {
                             />
                             {contaEncontrada && (
                                 <Alert variant="success" className="mt-2 small py-2">
-                                    ✅ Conta encontrada: <strong>{contaEncontrada.numero_conta}</strong> - {contaEncontrada.cliente?.nome_completo}
+                                    ✅ Conta encontrada: <strong>{contaEncontrada.numeroConta}</strong> - {contaEncontrada.cliente?.nomeCompleto}
                                 </Alert>
                             )}
                             {erro && (

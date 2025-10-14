@@ -10,7 +10,7 @@ export default class Movimentacao extends BaseModel {
   declare id: number
 
   @column()
-  declare tipo: 'deposito' | 'saque' | 'transferencia' | 'aplicacao'
+  declare tipo: 'deposito' | 'saque' | 'transferencia' 
 
   @column()
   declare valor: number

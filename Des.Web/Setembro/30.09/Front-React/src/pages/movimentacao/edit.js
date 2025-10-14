@@ -32,7 +32,6 @@ export default function EditMovimentacao() {
         { value: 'deposito', label: 'Depósito' },
         { value: 'saque', label: 'Saque' },
         { value: 'transferencia', label: 'Transferência' },
-        { value: 'aplicacao', label: 'Aplicação Financeira' }
     ];
 
     // Função para buscar conta pelo número
@@ -81,7 +80,7 @@ export default function EditMovimentacao() {
 
     function updateMovimentacao() {
         // Validações baseadas no tipo
-        if (tipo === 'saque' || tipo === 'transferencia' || tipo === 'aplicacao') {
+        if (tipo === 'saque' || tipo === 'transferencia') {
             if (!contaOrigemEncontrada) {
                 setErroOrigem('Conta de origem é obrigatória para este tipo de movimentação');
                 return;
@@ -99,7 +98,7 @@ export default function EditMovimentacao() {
             conta_origem_id: tipo === 'deposito' ? null : contaOrigemEncontrada?.id,
             conta_destino_id: tipo === 'saque' ? null : contaDestinoEncontrada?.id,
             descricao,
-            data_movimentacao: dataMovimentacao
+            data_movimentacao: new Date(dataMovimentacao).toISOString() 
         };
 
         Client.put(`movimentacoes/${movimentacao.id}`, upMovimentacao)
@@ -244,7 +243,7 @@ export default function EditMovimentacao() {
                         <div className="col-md-4">
                             <Label>Data da Movimentação</Label>
                             <Input 
-                                type="date" 
+                                type="datetime-local" 
                                 value={dataMovimentacao} 
                                 onChange={e => setDataMovimentacao(e.target.value)} 
                             />

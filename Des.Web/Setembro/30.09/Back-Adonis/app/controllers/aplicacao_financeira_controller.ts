@@ -13,7 +13,7 @@ export default class AplicacoesFinanceirasController {
         return response.forbidden({ message: 'Você não tem permissão para listar aplicações financeiras' })
       }
 
-      const aplicacoes = await AplicacaoFinanceiraService.listarAplicacaoFinanceira()
+      const aplicacoes = await AplicacaoFinanceiraService.listarAplicacoes()
       return response.status(200).json({ message: 'OK', data: aplicacoes })
     } catch (error) {
       logger.error(error)
@@ -45,7 +45,7 @@ export default class AplicacoesFinanceirasController {
         return response.forbidden({ message: 'Você não tem permissão para criar aplicações financeiras' })
       }
 
-      const aplicacao = await AplicacaoFinanceiraService.criarAplicacaoFinanceira(payload)
+      const aplicacao = await AplicacaoFinanceiraService.criarAplicacao(payload)
       return response.status(201).json({ message: 'OK', data: aplicacao })
     } catch (error) {
       logger.error(error)
@@ -61,7 +61,7 @@ export default class AplicacoesFinanceirasController {
         return response.forbidden({ message: 'Você não tem permissão para ver aplicação financeira' })
       }
 
-      const aplicacao = await AplicacaoFinanceiraService.buscarAplicacaoFinanceira(params.id)
+      const aplicacao = await AplicacaoFinanceiraService.buscarAplicacao(params.id)
       return response.status(200).json({ message: 'OK', data: aplicacao })
     } catch (error) {
       logger.error(error)
@@ -93,7 +93,7 @@ export default class AplicacoesFinanceirasController {
         return response.forbidden({ message: 'Você não tem permissão para alterar aplicação financeira' })
       }
 
-      const aplicacao = await AplicacaoFinanceiraService.atualizarAplicacaoFinanceira(params.id, payload)
+      const aplicacao = await AplicacaoFinanceiraService.atualizarAplicacao(params.id, payload)
       return response.status(200).json({ message: 'OK', data: aplicacao })
     } catch (error) {
       logger.error(error)
@@ -109,7 +109,7 @@ export default class AplicacoesFinanceirasController {
         return response.forbidden({ message: 'Você não tem permissão para remover aplicação financeira' })
       }
 
-      await AplicacaoFinanceiraService.deletarAplicacaoFinanceira(params.id)
+      await AplicacaoFinanceiraService.deletarAplicacao(params.id)
       return response.status(200).json({ message: 'OK' })
     } catch (error) {
       logger.error(error)

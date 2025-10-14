@@ -40,13 +40,13 @@ export const permissions = [
 
     listMovimentacao: true,
     viewMovimentacao: true,
-    createMovimentacao: true,
+    createMovimentacao: false,
     editMovimentacao: true,
     deleteMovimentacao: true,
 
     listAplicacaoFinanceira: true,
     viewAplicacaoFinanceira: true,
-    createAplicacaoFinanceira: true,
+    createAplicacaoFinanceira: false,
     editAplicacaoFinanceira: true,
     deleteAplicacaoFinanceira: true,
   },

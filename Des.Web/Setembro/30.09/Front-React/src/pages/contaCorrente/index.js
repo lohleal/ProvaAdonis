@@ -59,7 +59,7 @@ export default function IndexContaCorrente() {
             hide={[false, false, false, false, false]}
             data={data}
             keys={['numeroConta', 'numeroAgencia', 'saldo_formatado', 'cliente_cpf']}
-            resource='contas-correntes'
+            resource='contasCorrentes'
             crud={['viewContaCorrente', 'createContaCorrente', 'editContaCorrente', 'deleteContaCorrente']}
           />
         </Container>

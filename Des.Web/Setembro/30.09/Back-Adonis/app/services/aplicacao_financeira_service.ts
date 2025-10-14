@@ -34,7 +34,7 @@ export default class AplicacaoFinanceiraService {
       .firstOrFail()
 
     const conta = await ContaCorrente.findOrFail(aplicacao.conta_corrente_id)
-    conta.saldo += Number(aplicacao.valor) 
+    conta.saldo += Number(aplicacao.valor)
 
     if (payload.valor) {
       if (Number(conta.saldo) < Number(payload.valor)) throw new Error('Saldo insuficiente.')
@@ -55,11 +55,14 @@ export default class AplicacaoFinanceiraService {
       .firstOrFail()
 
     const conta = await ContaCorrente.findOrFail(aplicacao.conta_corrente_id)
-    conta.saldo += Number(aplicacao.valor)
-    await conta.save()
 
-    const data = aplicacao.toJSON()
+    // Garantindo que seja number
+    const valorAplicacao = Number(aplicacao.valor) || 0
+    conta.saldo = Number(conta.saldo) + valorAplicacao
+
+    await conta.save()
     await aplicacao.delete()
-    return data
+
+    return aplicacao.toJSON()
   }
 }

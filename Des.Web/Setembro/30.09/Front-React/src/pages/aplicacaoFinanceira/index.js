@@ -64,7 +64,7 @@ export default function IndexAplicacaoFinanceira() {
                         hide={[false, false, false, false, false, false]}
                         data={data}
                         keys={['tipo_formatado', 'valor_formatado', 'status_formatado', 'conta_corrente_info', 'data_criacao']} 
-                        resource='aplicacoes-financeiras'
+                        resource='aplicacoesFinanceiras'
                         crud={['viewAplicacaoFinanceira', 'createAplicacaoFinanceira', 'editAplicacaoFinanceira', 'deleteAplicacaoFinanceira']}
                     />
                   </Container>

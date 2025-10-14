@@ -1,4 +1,6 @@
 import ContaCorrente from "#models/conta_corrente"
+import Movimentacao from "#models/movimentacao"
+import AplicacaoFinanceira from "#models/aplicacao_financeira"
 
 export default class ContaCorrenteService {
   static async listarContas() {
@@ -26,8 +28,23 @@ export default class ContaCorrenteService {
 
   static async deletarConta(id: number) {
     const conta = await ContaCorrente.findOrFail(id)
+
+    if (Number(conta.saldo) !== 0) {
+      throw new Error('Não é possível excluir uma conta com saldo diferente de zero.')
+    }
+
+    // Verifica se ainda há aplicações ativas
+    const aplicacoesAtivas = await AplicacaoFinanceira.query()
+      .where('conta_corrente_id', id)
+      .where('status', 'ativa')
+
+    if (aplicacoesAtivas.length > 0) {
+      throw new Error('Não é possível excluir conta com aplicações financeiras ativas.')
+    }
+
     const data = conta.toJSON()
     await conta.delete()
+
     return data
   }
 }

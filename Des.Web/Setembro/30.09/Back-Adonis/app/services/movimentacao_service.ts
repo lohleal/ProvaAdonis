@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import ContaCorrente from '#models/conta_corrente'
 import Movimentacao from '#models/movimentacao'
 
@@ -19,10 +20,15 @@ export default class MovimentacaoService {
   static async criarMovimentacao(payload: any) {
     const { tipo, valor, contaOrigemId, contaDestinoId } = payload
 
+    // Converte data para DateTime
+    if (payload.data_movimentacao) {
+      payload.data_movimentacao = DateTime.fromISO(payload.data_movimentacao)
+    }
+
     const trx = await Movimentacao.transaction()
     try {
       // Débito da conta de origem
-      if (tipo === 'saque' || tipo === 'transferencia' || tipo === 'aplicacao') {
+      if (tipo === 'saque' || tipo === 'transferencia') {
         const contaOrigem = await ContaCorrente.findOrFail(contaOrigemId, { client: trx })
         if (Number(contaOrigem.saldo) < Number(valor)) throw new Error('Saldo insuficiente.')
         contaOrigem.saldo -= Number(valor)
@@ -57,8 +63,13 @@ export default class MovimentacaoService {
       const mov = await Movimentacao.findOrFail(id, { client: trx })
       const { tipo, valor, contaOrigemId, contaDestinoId } = payload
 
+      // Converte data para DateTime
+      if (payload.data_movimentacao) {
+        payload.data_movimentacao = DateTime.fromISO(payload.data_movimentacao)
+      }
+
       // Reverte saldo antigo
-      if (mov.tipo === 'saque' || mov.tipo === 'transferencia' || mov.tipo === 'aplicacao') {
+      if (mov.tipo === 'saque' || mov.tipo === 'transferencia') {
         const contaOrigem = await ContaCorrente.findOrFail(mov.contaOrigemId, { client: trx })
         contaOrigem.saldo += Number(mov.valor)
         await contaOrigem.useTransaction(trx).save()
@@ -71,7 +82,7 @@ export default class MovimentacaoService {
       }
 
       // Aplica nova movimentação
-      if (tipo === 'saque' || tipo === 'transferencia' || tipo === 'aplicacao') {
+      if (tipo === 'saque' || tipo === 'transferencia') {
         const contaOrigem = await ContaCorrente.findOrFail(contaOrigemId, { client: trx })
         if (Number(contaOrigem.saldo) < Number(valor)) throw new Error('Saldo insuficiente.')
         contaOrigem.saldo -= Number(valor)
@@ -104,7 +115,7 @@ export default class MovimentacaoService {
       const mov = await Movimentacao.findOrFail(id, { client: trx })
 
       // Reverte saldo
-      if (mov.tipo === 'saque' || mov.tipo === 'transferencia' || mov.tipo === 'aplicacao') {
+      if (mov.tipo === 'saque' || mov.tipo === 'transferencia') {
         const contaOrigem = await ContaCorrente.findOrFail(mov.contaOrigemId, { client: trx })
         contaOrigem.saldo += Number(mov.valor)
         await contaOrigem.useTransaction(trx).save()

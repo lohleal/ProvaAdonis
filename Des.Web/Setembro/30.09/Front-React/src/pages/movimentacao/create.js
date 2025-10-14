@@ -28,7 +28,6 @@ export default function CreateMovimentacao() {
         { value: 'deposito', label: 'Depósito' },
         { value: 'saque', label: 'Saque' },
         { value: 'transferencia', label: 'Transferência' },
-        { value: 'aplicacao', label: 'Aplicação Financeira' }
     ];
 
     function verifyPermission() {
@@ -82,10 +81,9 @@ export default function CreateMovimentacao() {
 
     useEffect(() => {
         verifyPermission();
-        // Define data atual como padrão
-        const hoje = new Date().toISOString().split('T')[0];
-        setDataMovimentacao(hoje);
-        // Simula carregamento
+        const agora = new Date();
+        const isoLocal = agora.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+        setDataMovimentacao(isoLocal);
         setTimeout(() => setLoad(false), 500);
     }, []);
 
@@ -119,7 +117,7 @@ export default function CreateMovimentacao() {
 
     function sendData() {
         // Validações baseadas no tipo
-        if (tipo === 'saque' || tipo === 'transferencia' || tipo === 'aplicacao') {
+        if (tipo === 'saque' || tipo === 'transferencia') {
             if (!contaOrigemEncontrada) {
                 setErroOrigem('Conta de origem é obrigatória para este tipo de movimentação');
                 return;
@@ -142,7 +140,7 @@ export default function CreateMovimentacao() {
             conta_origem_id: tipo === 'deposito' ? null : contaOrigemEncontrada?.id,
             conta_destino_id: tipo === 'saque' ? null : contaDestinoEncontrada?.id,
             descricao,
-            data_movimentacao: new Date(dataMovimentacao).toISOString() 
+            data_movimentacao: new Date(dataMovimentacao).toISOString()
         };
 
         Client.post('movimentacoes', movimentacao)
@@ -151,7 +149,7 @@ export default function CreateMovimentacao() {
     }
 
     // Mostra/oculta campos baseado no tipo
-    const showContaOrigem = tipo === 'saque' || tipo === 'transferencia' || tipo === 'aplicacao';
+    const showContaOrigem = tipo === 'saque' || tipo === 'transferencia';
     const showContaDestino = tipo === 'deposito' || tipo === 'transferencia';
 
     return (
@@ -248,7 +246,7 @@ export default function CreateMovimentacao() {
                         <div className="col-md-4">
                             <Label>Data da Movimentação</Label>
                             <Input
-                                type="date"
+                                type="datetime-local"
                                 value={dataMovimentacao}
                                 onChange={e => setDataMovimentacao(e.target.value)}
                             />
