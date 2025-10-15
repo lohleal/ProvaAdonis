@@ -47,7 +47,7 @@ export const permissions = [
     listAplicacaoFinanceira: true,
     viewAplicacaoFinanceira: true,
     createAplicacaoFinanceira: false,
-    editAplicacaoFinanceira: true,
+    editAplicacaoFinanceira: false,
     deleteAplicacaoFinanceira: true,
   },
   // Papel 2: Cliente
@@ -73,7 +73,7 @@ export const permissions = [
     listAplicacaoFinanceira: true,
     viewAplicacaoFinanceira: true,
     createAplicacaoFinanceira: true,
-    editAplicacaoFinanceira: false,
+    editAplicacaoFinanceira: true,
     deleteAplicacaoFinanceira: false,
   },
 ]
