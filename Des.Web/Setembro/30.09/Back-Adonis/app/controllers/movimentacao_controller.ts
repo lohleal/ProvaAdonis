@@ -1,95 +1,57 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { createMovimentacao, updateMovimentacao } from '#validators/movimentacao'
-import MovimentacaoPolicy from '#policies/movimentacao_policy'
 import MovimentacaoService from '#services/movimentacao_service'
 import logger from '@adonisjs/core/services/logger'
 
 export default class MovimentacoesController {
-  async index({ response, auth, bouncer }: HttpContext) {
+  async index({ request, response }: HttpContext) {
     try {
-      await auth.getUserOrFail()
-
-      if (await bouncer.with(MovimentacaoPolicy).denies('list')) {
-        return response.forbidden({ message: 'Você não tem permissão para listar movimentações' })
-      }
-
-      const movimentacoes = await MovimentacaoService.listarMovimentacao()
-      return response.ok({ message: 'OK', data: movimentacoes })
+      const resultado = await MovimentacaoService.listarMovimentacoes()
+      return response.status(200).json({ message: 'OK', data: resultado })
     } catch (error) {
       logger.error(error)
-      return response.internalServerError({ message: 'ERROR' })
+      return response.status(500).json({ message: 'ERROR' })
     }
   }
 
-  async store({ request, response, auth, bouncer }: HttpContext) {
-    const payload = await request.validateUsing(createMovimentacao)
+  async show({ params, response }: HttpContext) {
     try {
-      await auth.getUserOrFail()
-
-      if (await bouncer.with(MovimentacaoPolicy).denies('create')) {
-        return response.forbidden({ message: 'Você não tem permissão para criar movimentações' })
-      }
-
-      const movimentacao = await MovimentacaoService.criarMovimentacao(payload)
-      return response.created({ message: 'OK', data: movimentacao })
-    } catch (error) {
-      logger.error(error)
-      if (error.message?.includes('Saldo insuficiente')) {
-        return response.badRequest({ message: 'Saldo insuficiente para realizar a operação' })
-      }
-      return response.internalServerError({ message: 'ERROR' })
-    }
-  }
-
-  async show({ params, response, auth, bouncer }: HttpContext) {
-    try {
-      await auth.getUserOrFail()
-
-      if (await bouncer.with(MovimentacaoPolicy).denies('view')) {
-        return response.forbidden({ message: 'Você não tem permissão para ver movimentações' })
-      }
-
       const movimentacao = await MovimentacaoService.buscarMovimentacao(params.id)
-      return response.ok({ message: 'OK', data: movimentacao })
+      return response.status(200).json({ message: 'OK', data: movimentacao })
     } catch (error) {
       logger.error(error)
-      return response.internalServerError({ message: 'ERROR' })
+      return response.status(500).json({ message: 'ERROR' })
     }
   }
 
-  async update({ params, request, response, auth, bouncer }: HttpContext) {
-    const payload = await request.validateUsing(updateMovimentacao)
+  async store({ request, response }: HttpContext) {
     try {
-      await auth.getUserOrFail()
+      const payload = request.only(['tipo', 'valor', 'conta_origem_id', 'conta_destino_id', 'descricao', 'data_movimentacao'])
+      const movimentacao = await MovimentacaoService.criarMovimentacao(payload)
+      return response.status(201).json({ message: 'OK', data: movimentacao })
+    } catch (error) {
+      logger.error(error)
+      return response.status(400).json({ message: 'Erro ao criar movimentação', error: error.message })
+    }
+  }
 
-      if (await bouncer.with(MovimentacaoPolicy).denies('edit')) {
-        return response.forbidden({ message: 'Você não tem permissão para editar movimentações' })
-      }
-
+  async update({ params, request, response }: HttpContext) {
+    try {
+      const payload = request.only(['tipo', 'valor', 'conta_origem_id', 'conta_destino_id', 'descricao', 'data_movimentacao'])
       const movimentacao = await MovimentacaoService.atualizarMovimentacao(params.id, payload)
-      return response.ok({ message: 'OK', data: movimentacao })
+      return response.status(200).json({ message: 'OK', data: movimentacao })
     } catch (error) {
       logger.error(error)
-      if (error.message?.includes('Saldo insuficiente')) {
-        return response.badRequest({ message: 'Saldo insuficiente para realizar a operação' })
-      }
-      return response.internalServerError({ message: 'ERROR' })
+      return response.status(400).json({ message: 'Erro ao atualizar movimentação', error: error.message })
     }
   }
 
-  async destroy({ params, response, auth, bouncer }: HttpContext) {
+  async destroy({ params, response }: HttpContext) {
     try {
-      await auth.getUserOrFail()
-
-      if (await bouncer.with(MovimentacaoPolicy).denies('delete')) {
-        return response.forbidden({ message: 'Você não tem permissão para remover movimentações' })
-      }
-
-      await MovimentacaoService.deletarMovimentacao(params.id)
-      return response.ok({ message: 'OK' })
+      const movimentacao = await MovimentacaoService.deletarMovimentacao(params.id)
+      return response.status(200).json({ message: 'Movimentação excluída com sucesso', data: movimentacao })
     } catch (error) {
       logger.error(error)
-      return response.internalServerError({ message: 'ERROR' })
+      return response.status(404).json({ message: 'Movimentação não encontrada', error: error.message })
     }
   }
 }

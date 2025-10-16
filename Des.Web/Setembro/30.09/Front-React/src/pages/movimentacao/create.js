@@ -35,110 +35,90 @@ export default function CreateMovimentacao() {
         else if (permissions.createMovimentacao === 0) navigate(-1);
     }
 
-    // Função para buscar conta pelo número
-    async function buscarContaPorNumero(numeroConta, tipoConta) {
-        if (!numeroConta) {
-            if (tipoConta === 'origem') {
-                setContaOrigemEncontrada(null);
-                setErroOrigem('');
+    // Busca a conta do cliente logado automaticamente
+    async function buscarContaOrigemCliente() {
+        try {
+            const response = await Client.get(`contasCorrentes?clienteId=${dataUser.id}`);
+            if (response.data.data && response.data.data.length > 0) {
+                const conta = response.data.data[0];
+                setContaOrigemEncontrada(conta);
+                setNumeroContaOrigem(conta.numeroConta);
             } else {
-                setContaDestinoEncontrada(null);
-                setErroDestino('');
+                setErroOrigem('Nenhuma conta encontrada para este cliente.');
             }
+        } catch (error) {
+            setErroOrigem('Erro ao buscar conta de origem.');
+        }
+    }
+
+    async function buscarContaDestino(numeroConta) {
+        if (!numeroConta) {
+            setContaDestinoEncontrada(null);
+            setErroDestino('');
             return;
         }
 
         try {
-            const response = await Client.get(`contasCorrentes?numero_conta=${numeroConta}`);
+            const response = await Client.get(`contasCorrentes?numeroConta=${numeroConta}`);
             if (response.data.data && response.data.data.length > 0) {
                 const conta = response.data.data[0];
-                if (tipoConta === 'origem') {
-                    setContaOrigemEncontrada(conta);
-                    setErroOrigem('');
-                } else {
-                    setContaDestinoEncontrada(conta);
-                    setErroDestino('');
-                }
-            } else {
-                if (tipoConta === 'origem') {
-                    setContaOrigemEncontrada(null);
-                    setErroOrigem('Conta de origem não encontrada');
-                } else {
-                    setContaDestinoEncontrada(null);
-                    setErroDestino('Conta de destino não encontrada');
-                }
-            }
-        } catch (error) {
-            if (tipoConta === 'origem') {
-                setContaOrigemEncontrada(null);
-                setErroOrigem('Erro ao buscar conta de origem');
+                setContaDestinoEncontrada(conta);
+                setErroDestino('');
             } else {
                 setContaDestinoEncontrada(null);
-                setErroDestino('Erro ao buscar conta de destino');
+                setErroDestino('Conta de destino não encontrada');
             }
+        } catch (error) {
+            setContaDestinoEncontrada(null);
+            setErroDestino('Erro ao buscar conta de destino');
         }
     }
 
     useEffect(() => {
         verifyPermission();
         const agora = new Date();
-        const isoLocal = agora.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+        const isoLocal = agora.toISOString().slice(0, 16);
         setDataMovimentacao(isoLocal);
+        buscarContaOrigemCliente();
         setTimeout(() => setLoad(false), 500);
     }, []);
 
-    // Busca conta origem quando o número muda
+    // Busca conta destino com debounce
     useEffect(() => {
-        const timer = setTimeout(() => {
-            if (numeroContaOrigem && numeroContaOrigem.length >= 4) {
-                buscarContaPorNumero(numeroContaOrigem, 'origem');
-            } else {
-                setContaOrigemEncontrada(null);
-                setErroOrigem('');
-            }
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [numeroContaOrigem]);
-
-    // Busca conta destino quando o número muda
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (numeroContaDestino && numeroContaDestino.length >= 4) {
-                buscarContaPorNumero(numeroContaDestino, 'destino');
-            } else {
-                setContaDestinoEncontrada(null);
-                setErroDestino('');
-            }
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [numeroContaDestino]);
+        if (tipo === 'transferencia') {
+            const timer = setTimeout(() => {
+                if (numeroContaDestino && numeroContaDestino.length >= 4) {
+                    buscarContaDestino(numeroContaDestino);
+                } else {
+                    setContaDestinoEncontrada(null);
+                    setErroDestino('');
+                }
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [numeroContaDestino, tipo]);
 
     function sendData() {
-        // Validações baseadas no tipo
-        if (tipo === 'saque' || tipo === 'transferencia') {
-            if (!contaOrigemEncontrada) {
-                setErroOrigem('Conta de origem é obrigatória para este tipo de movimentação');
-                return;
-            }
-            // Verifica saldo para saque e transferência
-            if ((tipo === 'saque' || tipo === 'transferencia') && contaOrigemEncontrada.saldo < parseFloat(valor)) {
-                setErroOrigem('Saldo insuficiente na conta de origem');
-                return;
-            }
+        if (!contaOrigemEncontrada) {
+            setErroOrigem('Conta de origem não encontrada.');
+            return;
         }
 
-        if ((tipo === 'deposito' || tipo === 'transferencia') && !contaDestinoEncontrada) {
-            setErroDestino('Conta de destino é obrigatória para este tipo de movimentação');
+        if (tipo === 'transferencia' && !contaDestinoEncontrada) {
+            setErroDestino('Informe uma conta de destino válida.');
+            return;
+        }
+
+        if ((tipo === 'saque' || tipo === 'transferencia') && contaOrigemEncontrada.saldo < parseFloat(valor)) {
+            setErroOrigem('Saldo insuficiente na conta de origem.');
             return;
         }
 
         const movimentacao = {
             tipo,
             valor: parseFloat(valor),
-            conta_origem_id: tipo === 'deposito' ? null : contaOrigemEncontrada?.id,
-            conta_destino_id: tipo === 'saque' ? null : contaDestinoEncontrada?.id,
+            conta_origem_id: contaOrigemEncontrada?.id,
+            conta_destino_id: tipo === 'transferencia' ? contaDestinoEncontrada?.id : null,
             descricao,
             data_movimentacao: new Date(dataMovimentacao).toISOString()
         };
@@ -148,9 +128,8 @@ export default function CreateMovimentacao() {
             .catch(console.error);
     }
 
-    // Mostra/oculta campos baseado no tipo
-    const showContaOrigem = tipo === 'saque' || tipo === 'transferencia';
-    const showContaDestino = tipo === 'deposito' || tipo === 'transferencia';
+    // Campos exibidos conforme o tipo
+    const showContaDestino = tipo === 'transferencia';
 
     return (
         <>
@@ -183,32 +162,26 @@ export default function CreateMovimentacao() {
                         </div>
                     </div>
 
-                    {showContaOrigem && (
+                    {/* Conta de origem automática */}
+                    {contaOrigemEncontrada && (
                         <div className="row mt-3">
                             <div className="col-md-12">
-                                <Label>Número da Conta de Origem</Label>
+                                <Label>Conta de Origem</Label>
                                 <Input
                                     type="text"
-                                    value={numeroContaOrigem}
-                                    onChange={e => setNumeroContaOrigem(e.target.value)}
-                                    placeholder="Digite o número da conta de origem"
+                                    value={contaOrigemEncontrada.numeroConta}
+                                    disabled
                                 />
-                                {contaOrigemEncontrada && (
-                                    <Alert variant="success" className="mt-2 small py-2">
-                                        ✅ Conta origem: <strong>{contaOrigemEncontrada.numeroConta}</strong> - {contaOrigemEncontrada.cliente?.nomeCompleto}
-                                        <br />
-                                        Saldo: <strong>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaOrigemEncontrada.saldo)}</strong>
-                                    </Alert>
-                                )}
-                                {erroOrigem && (
-                                    <Alert variant="danger" className="mt-2 small py-2">
-                                        ❌ {erroOrigem}
-                                    </Alert>
-                                )}
+                                <Alert variant="success" className="mt-2 small py-2">
+                                    ✅ Conta origem: <strong>{contaOrigemEncontrada.numeroConta}</strong> - {contaOrigemEncontrada.cliente?.nomeCompleto}
+                                    <br />
+                                    Saldo: <strong>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaOrigemEncontrada.saldo)}</strong>
+                                </Alert>
                             </div>
                         </div>
                     )}
 
+                    {/* Campo destino aparece só na transferência */}
                     {showContaDestino && (
                         <div className="row mt-3">
                             <div className="col-md-12">

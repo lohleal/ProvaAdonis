@@ -14,13 +14,13 @@ export default function EditAplicacaoFinanceira() {
 
     const [tipo, setTipo] = useState(aplicacao.tipo || '');
     const [valor, setValor] = useState(aplicacao.valor || '');
-    const [numeroConta, setNumeroConta] = useState(aplicacao.conta_corrente?.numero_conta || '');
     const [status, setStatus] = useState(aplicacao.status || 'ativa');
     const [contaEncontrada, setContaEncontrada] = useState(aplicacao.conta_corrente || null);
     const [erro, setErro] = useState('');
     const [load, setLoad] = useState(true);
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
+
     const permissions = getPermissions();
     const dataUser = getDataUser();
 
@@ -35,34 +35,35 @@ export default function EditAplicacaoFinanceira() {
         { value: 'resgatada', label: 'Resgatada' }
     ];
 
-    // Função para buscar conta pelo número
-    async function buscarContaPorNumero() {
-        if (!numeroConta) {
-            setContaEncontrada(null);
-            setErro('');
-            return;
-        }
+    function verifyPermission() {
+        if (!dataUser) navigate('/login');
+        else if (permissions.editAplicacaoFinanceira === 0) navigate(-1);
+    }
 
+    // Busca automaticamente a conta do cliente logado
+    async function buscarContaDoCliente() {
         try {
-            setErro('');
-            const response = await Client.get(`contasCorrentes?numero_conta=${numeroConta}`);
+            const response = await Client.get(`contasCorrentes?clienteId=${dataUser.id}`);
             if (response.data.data && response.data.data.length > 0) {
-                const conta = response.data.data[0];
-                setContaEncontrada(conta);
-                setErro('');
+                setContaEncontrada(response.data.data[0]);
             } else {
-                setContaEncontrada(null);
-                setErro('Conta corrente não encontrada');
+                setErro('Nenhuma conta corrente encontrada para este cliente.');
             }
         } catch (error) {
-            setContaEncontrada(null);
-            setErro('Erro ao buscar conta corrente');
+            setErro('Erro ao buscar conta corrente do cliente.');
+        } finally {
+            setLoad(false);
         }
     }
 
+    useEffect(() => {
+        verifyPermission();
+        buscarContaDoCliente();
+    }, []);
+
     function updateAplicacaoFinanceira() {
         if (!contaEncontrada) {
-            setErro('Por favor, digite um número de conta válido');
+            setErro('Conta corrente não encontrada.');
             return;
         }
 
@@ -78,39 +79,20 @@ export default function EditAplicacaoFinanceira() {
             .catch(console.error);
     }
 
-    const handleClose = () => { setShow(false); navigate('/aplicacoesFinanceiras'); }
-
-    function verifyPermission() {
-        if(!dataUser) navigate('/login');
-        else if(permissions.editAplicacaoFinanceira === 0) navigate(-1);
-    }
-
-    useEffect(() => {
-        verifyPermission();
-        setTimeout(() => setLoad(false), 500);
-    }, []);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (numeroConta && numeroConta.length >= 4) {
-                buscarContaPorNumero();
-            } else {
-                setContaEncontrada(null);
-                setErro('');
-            }
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [numeroConta]);
+    const handleClose = () => {
+        setShow(false);
+        navigate('/aplicacoesFinanceiras');
+    };
 
     return (
         <>
             <NavigationBar />
-            {load 
-                ? <Container className="d-flex justify-content-center mt-5">
+            {load ? (
+                <Container className="d-flex justify-content-center mt-5">
                     <OrbitProgress variant="spokes" color="#582770" size="medium" />
-                  </Container>
-                : <Container className='mt-2'>
+                </Container>
+            ) : (
+                <Container className='mt-2'>
                     <div className="row">
                         <div className="col-md-6">
                             <Label>Tipo de Aplicação</Label>
@@ -121,12 +103,13 @@ export default function EditAplicacaoFinanceira() {
                                 ))}
                             </Select>
                         </div>
+
                         <div className="col-md-6">
                             <Label>Valor</Label>
-                            <Input 
-                                type="number" 
-                                value={valor} 
-                                onChange={e => setValor(e.target.value)} 
+                            <Input
+                                type="number"
+                                value={valor}
+                                onChange={e => setValor(e.target.value)}
                                 placeholder="Digite o valor"
                                 step="0.01"
                                 min="0.01"
@@ -137,15 +120,16 @@ export default function EditAplicacaoFinanceira() {
                     <div className="row mt-3">
                         <div className="col-md-6">
                             <Label>Número da Conta Corrente</Label>
-                            <Input 
-                                type="text" 
-                                value={numeroConta} 
-                                onChange={e => setNumeroConta(e.target.value)} 
-                                placeholder="Digite o número da conta"
+                            <Input
+                                type="text"
+                                value={contaEncontrada?.numeroConta || ''}
+                                disabled
                             />
                             {contaEncontrada && (
                                 <Alert variant="success" className="mt-2 small py-2">
-                                    ✅ Conta encontrada: <strong>{contaEncontrada.numeroConta}</strong> - {contaEncontrada.cliente?.nomeCompleto}
+                                    ✅ Conta: <strong>{contaEncontrada.numeroConta}</strong> - {contaEncontrada.cliente?.nomeCompleto}
+                                    <br />
+                                    Saldo: <strong>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaEncontrada.saldo)}</strong>
                                 </Alert>
                             )}
                             {erro && (
@@ -154,6 +138,7 @@ export default function EditAplicacaoFinanceira() {
                                 </Alert>
                             )}
                         </div>
+
                         <div className="col-md-6">
                             <Label>Status</Label>
                             <Select value={status} onChange={e => setStatus(e.target.value)}>
@@ -165,21 +150,25 @@ export default function EditAplicacaoFinanceira() {
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
-                         <Submit  value="Voltar" onClick={() => navigate('/aplicacoesFinanceiras')} />
-                         <Submit value="Alterar" onClick={updateAplicacaoFinanceira} disabled={!contaEncontrada || !tipo || !valor} />
+                        <Submit value="Voltar" onClick={() => navigate('/aplicacoesFinanceiras')} />
+                        <Submit
+                            value="Alterar"
+                            onClick={updateAplicacaoFinanceira}
+                            disabled={!contaEncontrada || !tipo || !valor}
+                        />
                     </div>
-                  </Container>
-            }
+                </Container>
+            )}
 
             <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
                 <Modal.Header closeButton>
                     <Modal.Title>Atualização - Aplicação Financeira</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Operação Efetuada com Sucesso!</Modal.Body>
+                <Modal.Body>Operação efetuada com sucesso!</Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleClose}>OK</Button>
                 </Modal.Footer>
             </Modal>
         </>
-    )
+    );
 }

@@ -9,7 +9,7 @@ export default class MovimentacaoSeeder extends BaseSeeder {
         tipo: 'deposito',
         valor: 1000.00,
         contaOrigemId: 1,
-        contaDestinoId: 1, 
+        contaDestinoId: null, 
         descricao: 'Depósito inicial',
         dataMovimentacao: DateTime.local(),
       },

@@ -1,6 +1,6 @@
+import { useNavigate, useLocation } from 'react-router';
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Container, Modal, Button, Alert } from 'react-bootstrap';
+import { Container, Alert } from 'react-bootstrap';
 import { OrbitProgress } from "react-loading-indicators";
 import NavigationBar from '../../components/navigationbar';
 import { Label, Input, Select, Submit } from "./style";
@@ -14,16 +14,17 @@ export default function EditMovimentacao() {
 
     const [tipo, setTipo] = useState(movimentacao.tipo || '');
     const [valor, setValor] = useState(movimentacao.valor || '');
-    const [numeroContaOrigem, setNumeroContaOrigem] = useState(movimentacao.contaOrigem?.numeroConta || '');
+    const [numeroContaOrigem, setNumeroContaOrigem] = useState('');
     const [numeroContaDestino, setNumeroContaDestino] = useState(movimentacao.contaDestino?.numeroConta || '');
     const [descricao, setDescricao] = useState(movimentacao.descricao || '');
-    const [dataMovimentacao, setDataMovimentacao] = useState(movimentacao.dataMovimentacao?.split('T')[0] || '');
+    const [dataMovimentacao, setDataMovimentacao] = useState(movimentacao.dataMovimentacao?.slice(0,16) || '');
     const [contaOrigemEncontrada, setContaOrigemEncontrada] = useState(movimentacao.contaOrigem || null);
     const [contaDestinoEncontrada, setContaDestinoEncontrada] = useState(movimentacao.contaDestino || null);
     const [erroOrigem, setErroOrigem] = useState('');
     const [erroDestino, setErroDestino] = useState('');
     const [load, setLoad] = useState(true);
     const [show, setShow] = useState(false);
+
     const navigate = useNavigate();
     const permissions = getPermissions();
     const dataUser = getDataUser();
@@ -34,71 +35,78 @@ export default function EditMovimentacao() {
         { value: 'transferencia', label: 'Transferência' },
     ];
 
-    // Função para buscar conta pelo número
-    async function buscarContaPorNumero(numeroConta, tipoConta) {
-        if (!numeroConta) {
-            if (tipoConta === 'origem') {
-                setContaOrigemEncontrada(null);
-                setErroOrigem('');
-            } else {
-                setContaDestinoEncontrada(null);
-                setErroDestino('');
-            }
-            return;
-        }
+    function verifyPermission() {
+        if (!dataUser) navigate('/login');
+        else if (permissions.editMovimentacao === 0) navigate(-1);
+    }
 
+    async function buscarContaOrigemCliente() {
         try {
-            const response = await Client.get(`contasCorrentes?numeroConta=${numeroConta}`);
+            const response = await Client.get(`contasCorrentes?clienteId=${dataUser.id}`);
             if (response.data.data && response.data.data.length > 0) {
                 const conta = response.data.data[0];
-                if (tipoConta === 'origem') {
-                    setContaOrigemEncontrada(conta);
-                    setErroOrigem('');
-                } else {
-                    setContaDestinoEncontrada(conta);
-                    setErroDestino('');
-                }
+                setContaOrigemEncontrada(conta);
+                setNumeroContaOrigem(conta.numeroConta);
             } else {
-                if (tipoConta === 'origem') {
-                    setContaOrigemEncontrada(null);
-                    setErroOrigem('Conta de origem não encontrada');
-                } else {
-                    setContaDestinoEncontrada(null);
-                    setErroDestino('Conta de destino não encontrada');
-                }
+                setErroOrigem('Nenhuma conta encontrada para este cliente.');
             }
-        } catch (error) {
-            if (tipoConta === 'origem') {
-                setContaOrigemEncontrada(null);
-                setErroOrigem('Erro ao buscar conta de origem');
-            } else {
-                setContaDestinoEncontrada(null);
-                setErroDestino('Erro ao buscar conta de destino');
-            }
+        } catch {
+            setErroOrigem('Erro ao buscar conta de origem.');
         }
     }
 
+    async function buscarContaDestino(numeroConta) {
+        if (!numeroConta) {
+            setContaDestinoEncontrada(null);
+            setErroDestino('');
+            return;
+        }
+    }
+    
+    useEffect(() => {
+        verifyPermission();
+        buscarContaOrigemCliente();
+        setTimeout(() => setLoad(false), 500);
+    }, []);
+
+    // Debounce para buscar conta destino
+    useEffect(() => {
+        if (tipo === 'transferencia') {
+            const timer = setTimeout(() => {
+                if (numeroContaDestino && numeroContaDestino.length >= 4) {
+                    buscarContaDestino(numeroContaDestino);
+                } else {
+                    setContaDestinoEncontrada(null);
+                    setErroDestino('');
+                }
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [numeroContaDestino, tipo]);
+
     function updateMovimentacao() {
-        // Validações baseadas no tipo
-        if (tipo === 'saque' || tipo === 'transferencia') {
-            if (!contaOrigemEncontrada) {
-                setErroOrigem('Conta de origem é obrigatória para este tipo de movimentação');
-                return;
-            }
+        if (!contaOrigemEncontrada) {
+            setErroOrigem('Conta de origem não encontrada.');
+            return;
         }
 
-        if ((tipo === 'deposito' || tipo === 'transferencia') && !contaDestinoEncontrada) {
-            setErroDestino('Conta de destino é obrigatória para este tipo de movimentação');
+        if (tipo === 'transferencia' && !contaDestinoEncontrada) {
+            setErroDestino('Informe uma conta de destino válida.');
+            return;
+        }
+
+        if ((tipo === 'saque' || tipo === 'transferencia') && contaOrigemEncontrada.saldo < parseFloat(valor)) {
+            setErroOrigem('Saldo insuficiente na conta de origem.');
             return;
         }
 
         const upMovimentacao = {
             tipo,
             valor: parseFloat(valor),
-            conta_origem_id: tipo === 'deposito' ? null : contaOrigemEncontrada?.id,
-            conta_destino_id: tipo === 'saque' ? null : contaDestinoEncontrada?.id,
+            conta_origem_id: contaOrigemEncontrada?.id,
+            conta_destino_id: tipo === 'transferencia' ? contaDestinoEncontrada?.id : null,
             descricao,
-            data_movimentacao: new Date(dataMovimentacao).toISOString() 
+            data_movimentacao: new Date(dataMovimentacao).toISOString()
         };
 
         Client.put(`movimentacoes/${movimentacao.id}`, upMovimentacao)
@@ -106,55 +114,17 @@ export default function EditMovimentacao() {
             .catch(console.error);
     }
 
-    const handleClose = () => { setShow(false); navigate('/movimentacoes'); }
+    const handleClose = () => {
+        setShow(false);
+        navigate('/movimentacoes');
+    };
 
-    function verifyPermission() {
-        if(!dataUser) navigate('/login');
-        else if(permissions.editMovimentacao === 0) navigate(-1);
-    }
-
-    useEffect(() => {
-        verifyPermission();
-        // Simula carregamento
-        setTimeout(() => setLoad(false), 500);
-    }, []);
-
-    // Busca conta origem quando o número muda
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (numeroContaOrigem && numeroContaOrigem.length >= 4) {
-                buscarContaPorNumero(numeroContaOrigem, 'origem');
-            } else {
-                setContaOrigemEncontrada(null);
-                setErroOrigem('');
-            }
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [numeroContaOrigem]);
-
-    // Busca conta destino quando o número muda
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (numeroContaDestino && numeroContaDestino.length >= 4) {
-                buscarContaPorNumero(numeroContaDestino, 'destino');
-            } else {
-                setContaDestinoEncontrada(null);
-                setErroDestino('');
-            }
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [numeroContaDestino]);
-
-    // Mostra/oculta campos baseado no tipo
-    const showContaOrigem = tipo === 'saque' || tipo === 'transferencia' || tipo === 'aplicacao';
-    const showContaDestino = tipo === 'deposito' || tipo === 'transferencia';
+    const showContaDestino = tipo === 'transferencia';
 
     return (
         <>
             <NavigationBar />
-            {load 
+            {load
                 ? <Container className="d-flex justify-content-center mt-5">
                     <OrbitProgress variant="spokes" color="#582770" size="medium" />
                   </Container>
@@ -171,10 +141,10 @@ export default function EditMovimentacao() {
                         </div>
                         <div className="col-md-6">
                             <Label>Valor</Label>
-                            <Input 
-                                type="number" 
-                                value={valor} 
-                                onChange={e => setValor(e.target.value)} 
+                            <Input
+                                type="number"
+                                value={valor}
+                                onChange={e => setValor(e.target.value)}
                                 placeholder="Digite o valor"
                                 step="0.01"
                                 min="0.01"
@@ -182,38 +152,30 @@ export default function EditMovimentacao() {
                         </div>
                     </div>
 
-                    {showContaOrigem && (
-                        <div className="row mt-3">
-                            <div className="col-md-12">
-                                <Label>Número da Conta de Origem</Label>
-                                <Input 
-                                    type="text" 
-                                    value={numeroContaOrigem} 
-                                    onChange={e => setNumeroContaOrigem(e.target.value)} 
-                                    placeholder="Digite o número da conta de origem"
-                                />
-                                {contaOrigemEncontrada && (
-                                    <Alert variant="success" className="mt-2 small py-2">
-                                        ✅ Conta origem: <strong>{contaOrigemEncontrada.numeroConta}</strong> - {contaOrigemEncontrada.cliente?.nomeCompleto}
-                                    </Alert>
-                                )}
-                                {erroOrigem && (
-                                    <Alert variant="danger" className="mt-2 small py-2">
-                                        ❌ {erroOrigem}
-                                    </Alert>
-                                )}
-                            </div>
+                    {/* Conta de origem */}
+                    <div className="row mt-3">
+                        <div className="col-md-12">
+                            <Label>Conta de Origem</Label>
+                            <Input type="text" value={numeroContaOrigem} disabled />
+                            {contaOrigemEncontrada && (
+                                <Alert variant="success" className="mt-2 small py-2">
+                                    ✅ Conta origem: <strong>{contaOrigemEncontrada.numeroConta}</strong> - {contaOrigemEncontrada.cliente?.nomeCompleto}
+                                    <br />
+                                    Saldo: <strong>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaOrigemEncontrada.saldo)}</strong>
+                                </Alert>
+                            )}
                         </div>
-                    )}
+                    </div>
 
+                    {/* Conta destino apenas se transferência */}
                     {showContaDestino && (
                         <div className="row mt-3">
                             <div className="col-md-12">
                                 <Label>Número da Conta de Destino</Label>
-                                <Input 
-                                    type="text" 
-                                    value={numeroContaDestino} 
-                                    onChange={e => setNumeroContaDestino(e.target.value)} 
+                                <Input
+                                    type="text"
+                                    value={numeroContaDestino}
+                                    onChange={e => setNumeroContaDestino(e.target.value)}
                                     placeholder="Digite o número da conta de destino"
                                 />
                                 {contaDestinoEncontrada && (
@@ -233,39 +195,36 @@ export default function EditMovimentacao() {
                     <div className="row mt-3">
                         <div className="col-md-8">
                             <Label>Descrição</Label>
-                            <Input 
-                                type="text" 
-                                value={descricao} 
-                                onChange={e => setDescricao(e.target.value)} 
+                            <Input
+                                type="text"
+                                value={descricao}
+                                onChange={e => setDescricao(e.target.value)}
                                 placeholder="Digite uma descrição"
                             />
                         </div>
                         <div className="col-md-4">
                             <Label>Data da Movimentação</Label>
-                            <Input 
-                                type="datetime-local" 
-                                value={dataMovimentacao} 
-                                onChange={e => setDataMovimentacao(e.target.value)} 
+                            <Input
+                                type="datetime-local"
+                                value={dataMovimentacao}
+                                onChange={e => setDataMovimentacao(e.target.value)}
                             />
                         </div>
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
-                    <Submit value="Voltar" onClick={() => navigate('/movimentacoes')} />
-                    <Submit value="Alterar" onClick={updateMovimentacao} disabled={!tipo || !valor} />
+                        <Submit value="Voltar" onClick={() => navigate('/movimentacoes')} />
+                        <Submit value="Alterar" onClick={updateMovimentacao} disabled={!tipo || !valor} />
                     </div>
-                  </Container>
+                </Container>
             }
 
-            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Atualização - Movimentação</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Operação Efetuada com Sucesso!</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" onClick={handleClose}>OK</Button>
-                </Modal.Footer>
-            </Modal>
+            <Alert show={show} variant="success" className="mt-3">
+                Operação efetuada com sucesso!
+                <div className="mt-2">
+                    <Submit value="OK" onClick={handleClose} />
+                </div>
+            </Alert>
         </>
-    )
+    );
 }

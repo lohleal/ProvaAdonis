@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
-import { Container, Button, Alert } from 'react-bootstrap';
+import { Container, Alert } from 'react-bootstrap';
 import { OrbitProgress } from "react-loading-indicators";
 import NavigationBar from '../../components/navigationbar';
 import { Label, Input, Select, Submit } from "./style";
@@ -11,12 +11,12 @@ import { getDataUser } from '../../service/UserService';
 export default function CreateAplicacaoFinanceira() {
     const [tipo, setTipo] = useState('');
     const [valor, setValor] = useState('');
-    const [numeroConta, setNumeroConta] = useState('');
     const [status, setStatus] = useState('ativa');
     const [contaEncontrada, setContaEncontrada] = useState(null);
     const [erro, setErro] = useState('');
     const [load, setLoad] = useState(true);
     const navigate = useNavigate();
+
     const permissions = getPermissions();
     const dataUser = getDataUser();
 
@@ -36,54 +36,30 @@ export default function CreateAplicacaoFinanceira() {
         else if (permissions.createAplicacaoFinanceira === 0) navigate(-1);
     }
 
-    // Função para buscar conta pelo número
-    async function buscarContaPorNumero() {
-        if (!numeroConta) {
-            setContaEncontrada(null);
-            setErro('');
-            return;
-        }
-
+    // Busca a conta do cliente logado
+    async function buscarContaDoCliente() {
         try {
-            setErro('');
-            const response = await Client.get(`contasCorrentes?numero_conta=${numeroConta}`);
+            const response = await Client.get(`contasCorrentes?clienteId=${dataUser.id}`);
             if (response.data.data && response.data.data.length > 0) {
-                const conta = response.data.data[0];
-                setContaEncontrada(conta);
-                setErro('');
+                setContaEncontrada(response.data.data[0]);
             } else {
-                setContaEncontrada(null);
-                setErro('Conta corrente não encontrada');
+                setErro('Nenhuma conta corrente encontrada para este cliente.');
             }
         } catch (error) {
-            setContaEncontrada(null);
-            setErro('Erro ao buscar conta corrente');
+            setErro('Erro ao buscar conta corrente do cliente.');
+        } finally {
+            setLoad(false);
         }
     }
 
     useEffect(() => {
         verifyPermission();
-        // Simula carregamento
-        setTimeout(() => setLoad(false), 500);
+        buscarContaDoCliente();
     }, []);
-
-    // Busca conta quando o número muda (com debounce)
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (numeroConta && numeroConta.length >= 4) {
-                buscarContaPorNumero();
-            } else {
-                setContaEncontrada(null);
-                setErro('');
-            }
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [numeroConta]);
 
     function sendData() {
         if (!contaEncontrada) {
-            setErro('Por favor, digite um número de conta válido');
+            setErro('Conta corrente não encontrada.');
             return;
         }
 
@@ -102,11 +78,12 @@ export default function CreateAplicacaoFinanceira() {
     return (
         <>
             <NavigationBar />
-            {load
-                ? <Container className="d-flex justify-content-center mt-5">
+            {load ? (
+                <Container className="d-flex justify-content-center mt-5">
                     <OrbitProgress variant="spokes" color="#582770" size="medium" />
                 </Container>
-                : <Container className='mt-2'>
+            ) : (
+                <Container className='mt-2'>
                     <div className="row">
                         <div className="col-md-6">
                             <Label>Tipo de Aplicação</Label>
@@ -135,13 +112,12 @@ export default function CreateAplicacaoFinanceira() {
                             <Label>Número da Conta Corrente</Label>
                             <Input
                                 type="text"
-                                value={numeroConta}
-                                onChange={e => setNumeroConta(e.target.value)}
-                                placeholder="Digite o número da conta"
+                                value={contaEncontrada?.numeroConta || ''}
+                                disabled
                             />
                             {contaEncontrada && (
                                 <Alert variant="success" className="mt-2 small py-2">
-                                    ✅ Conta encontrada: <strong>{contaEncontrada.numero_conta}</strong> - {contaEncontrada.cliente?.nome_completo} 
+                                    ✅ Conta: <strong>{contaEncontrada.numeroConta}</strong> - {contaEncontrada.cliente?.nomeCompleto}
                                     <br />
                                     Saldo: <strong>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaEncontrada.saldo)}</strong>
                                 </Alert>
@@ -152,6 +128,7 @@ export default function CreateAplicacaoFinanceira() {
                                 </Alert>
                             )}
                         </div>
+
                         <div className="col-md-6">
                             <Label>Status</Label>
                             <Select value={status} onChange={e => setStatus(e.target.value)}>
@@ -163,11 +140,15 @@ export default function CreateAplicacaoFinanceira() {
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
-                        <Submit  value="Voltar" onClick={() => navigate('/aplicacoesFinanceiras')} />
-                        <Submit value="Cadastrar" onClick={sendData} disabled={!contaEncontrada || !tipo || !valor} />
+                        <Submit value="Voltar" onClick={() => navigate('/aplicacoesFinanceiras')} />
+                        <Submit
+                            value="Cadastrar"
+                            onClick={sendData}
+                            disabled={!contaEncontrada || !tipo || !valor}
+                        />
                     </div>
                 </Container>
-            }
+            )}
         </>
     );
 }
