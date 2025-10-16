@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
-import { Container, Button, Alert } from 'react-bootstrap';
+import { Container, Alert } from 'react-bootstrap';
 import { OrbitProgress } from "react-loading-indicators";
 import NavigationBar from '../../components/navigationbar';
 import { Label, Input, Select, Submit } from "./style";
@@ -35,16 +35,26 @@ export default function CreateMovimentacao() {
         else if (permissions.createMovimentacao === 0) navigate(-1);
     }
 
-    // Busca a conta do cliente logado automaticamente
     async function buscarContaOrigemCliente() {
         try {
-            const response = await Client.get(`contasCorrentes?clienteId=${dataUser.id}`);
+            const response = await Client.get('contasCorrentes');
+            
             if (response.data.data && response.data.data.length > 0) {
-                const conta = response.data.data[0];
-                setContaOrigemEncontrada(conta);
-                setNumeroContaOrigem(conta.numeroConta);
+                const contaDoUsuario = response.data.data.find(conta => 
+                    conta.cliente?.email === dataUser.email || 
+                    conta.email === dataUser.email ||
+                    conta.cliente_email === dataUser.email
+                );
+                
+                if (contaDoUsuario) {
+                    setContaOrigemEncontrada(contaDoUsuario);
+                    setNumeroContaOrigem(contaDoUsuario.numeroConta);
+                    setErroOrigem('');
+                } else {
+                    setErroOrigem(`Nenhuma conta encontrada para o email: ${dataUser.email}`);
+                }
             } else {
-                setErroOrigem('Nenhuma conta encontrada para este cliente.');
+                setErroOrigem('Nenhuma conta cadastrada no sistema.');
             }
         } catch (error) {
             setErroOrigem('Erro ao buscar conta de origem.');
@@ -62,8 +72,14 @@ export default function CreateMovimentacao() {
             const response = await Client.get(`contasCorrentes?numeroConta=${numeroConta}`);
             if (response.data.data && response.data.data.length > 0) {
                 const conta = response.data.data[0];
-                setContaDestinoEncontrada(conta);
-                setErroDestino('');
+                
+                if (conta.numeroConta === contaOrigemEncontrada?.numeroConta) {
+                    setContaDestinoEncontrada(null);
+                    setErroDestino('Não é possível transferir para a própria conta!');
+                } else {
+                    setContaDestinoEncontrada(conta);
+                    setErroDestino('');
+                }
             } else {
                 setContaDestinoEncontrada(null);
                 setErroDestino('Conta de destino não encontrada');
@@ -83,7 +99,6 @@ export default function CreateMovimentacao() {
         setTimeout(() => setLoad(false), 500);
     }, []);
 
-    // Busca conta destino com debounce
     useEffect(() => {
         if (tipo === 'transferencia') {
             const timer = setTimeout(() => {
@@ -96,7 +111,7 @@ export default function CreateMovimentacao() {
             }, 500);
             return () => clearTimeout(timer);
         }
-    }, [numeroContaDestino, tipo]);
+    }, [numeroContaDestino, tipo, contaOrigemEncontrada]);
 
     function sendData() {
         if (!contaOrigemEncontrada) {
@@ -120,7 +135,7 @@ export default function CreateMovimentacao() {
             conta_origem_id: contaOrigemEncontrada?.id,
             conta_destino_id: tipo === 'transferencia' ? contaDestinoEncontrada?.id : null,
             descricao,
-            data_movimentacao: new Date(dataMovimentacao).toISOString()
+            data_movimentacao: new Date(dataMovimentacao).toISOString().slice(0, 19).replace('T', ' ')
         };
 
         Client.post('movimentacoes', movimentacao)
@@ -128,7 +143,6 @@ export default function CreateMovimentacao() {
             .catch(console.error);
     }
 
-    // Campos exibidos conforme o tipo
     const showContaDestino = tipo === 'transferencia';
 
     return (
@@ -162,7 +176,6 @@ export default function CreateMovimentacao() {
                         </div>
                     </div>
 
-                    {/* Conta de origem automática */}
                     {contaOrigemEncontrada && (
                         <div className="row mt-3">
                             <div className="col-md-12">
@@ -173,15 +186,20 @@ export default function CreateMovimentacao() {
                                     disabled
                                 />
                                 <Alert variant="success" className="mt-2 small py-2">
-                                    ✅ Conta origem: <strong>{contaOrigemEncontrada.numeroConta}</strong> - {contaOrigemEncontrada.cliente?.nomeCompleto}
-                                    <br />
-                                    Saldo: <strong>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaOrigemEncontrada.saldo)}</strong>
+                                    ✅ <strong>Conta do usuário logado:</strong> {contaOrigemEncontrada.numeroConta}<br />
+                                    <strong>Cliente:</strong> {contaOrigemEncontrada.cliente?.nomeCompleto || dataUser.nome}<br />
+                                    <strong>Saldo:</strong> {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaOrigemEncontrada.saldo)}
                                 </Alert>
                             </div>
                         </div>
                     )}
 
-                    {/* Campo destino aparece só na transferência */}
+                    {erroOrigem && (
+                        <Alert variant="danger" className="mt-3">
+                            ❌ {erroOrigem}
+                        </Alert>
+                    )}
+
                     {showContaDestino && (
                         <div className="row mt-3">
                             <div className="col-md-12">
@@ -194,7 +212,8 @@ export default function CreateMovimentacao() {
                                 />
                                 {contaDestinoEncontrada && (
                                     <Alert variant="success" className="mt-2 small py-2">
-                                        ✅ Conta destino: <strong>{contaDestinoEncontrada.numeroConta}</strong> - {contaDestinoEncontrada.cliente?.nomeCompleto}
+                                        ✅ <strong>Conta destino encontrada:</strong> {contaDestinoEncontrada.numeroConta}<br />
+                                        <strong>Cliente:</strong> {contaDestinoEncontrada.cliente?.nomeCompleto}
                                     </Alert>
                                 )}
                                 {erroDestino && (
@@ -228,7 +247,7 @@ export default function CreateMovimentacao() {
 
                     <div className="mt-3 d-flex gap-2">
                         <Submit value="Voltar" onClick={() => navigate('/movimentacoes')} />
-                        <Submit value="Cadastrar" onClick={sendData} disabled={!tipo || !valor} />
+                        <Submit value="Cadastrar" onClick={sendData} disabled={!tipo || !valor || !contaOrigemEncontrada || (showContaDestino && !contaDestinoEncontrada)} />
                     </div>
                 </Container>
             }

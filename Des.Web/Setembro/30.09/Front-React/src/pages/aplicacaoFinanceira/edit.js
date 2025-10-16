@@ -15,7 +15,7 @@ export default function EditAplicacaoFinanceira() {
     const [tipo, setTipo] = useState(aplicacao.tipo || '');
     const [valor, setValor] = useState(aplicacao.valor || '');
     const [status, setStatus] = useState(aplicacao.status || 'ativa');
-    const [contaEncontrada, setContaEncontrada] = useState(aplicacao.conta_corrente || null);
+    const [contaEncontrada, setContaEncontrada] = useState(null);
     const [erro, setErro] = useState('');
     const [load, setLoad] = useState(true);
     const [show, setShow] = useState(false);
@@ -40,14 +40,23 @@ export default function EditAplicacaoFinanceira() {
         else if (permissions.editAplicacaoFinanceira === 0) navigate(-1);
     }
 
-    // Busca automaticamente a conta do cliente logado
     async function buscarContaDoCliente() {
         try {
-            const response = await Client.get(`contasCorrentes?clienteId=${dataUser.id}`);
+            const response = await Client.get('contasCorrentes');
             if (response.data.data && response.data.data.length > 0) {
-                setContaEncontrada(response.data.data[0]);
+                const contaDoUsuario = response.data.data.find(conta =>
+                    conta.cliente?.email === dataUser.email ||
+                    conta.email === dataUser.email ||
+                    conta.cliente_email === dataUser.email
+                );
+                if (contaDoUsuario) {
+                    setContaEncontrada(contaDoUsuario);
+                    setErro('');
+                } else {
+                    setErro(`Nenhuma conta encontrada para o email: ${dataUser.email}`);
+                }
             } else {
-                setErro('Nenhuma conta corrente encontrada para este cliente.');
+                setErro('Nenhuma conta cadastrada no sistema.');
             }
         } catch (error) {
             setErro('Erro ao buscar conta corrente do cliente.');
@@ -65,6 +74,17 @@ export default function EditAplicacaoFinanceira() {
         if (!contaEncontrada) {
             setErro('Conta corrente não encontrada.');
             return;
+        }
+
+        let novoSaldo = contaEncontrada.saldo;
+        if (status === 'resgatada') {
+            novoSaldo += parseFloat(valor);
+        } else if (status === 'ativa' && aplicacao.status === 'resgatada') {
+            novoSaldo -= parseFloat(valor);
+            if (novoSaldo < 0) {
+                setErro('Saldo insuficiente para alterar para ativo.');
+                return;
+            }
         }
 
         const upAplicacao = {
@@ -103,7 +123,6 @@ export default function EditAplicacaoFinanceira() {
                                 ))}
                             </Select>
                         </div>
-
                         <div className="col-md-6">
                             <Label>Valor</Label>
                             <Input
@@ -127,7 +146,7 @@ export default function EditAplicacaoFinanceira() {
                             />
                             {contaEncontrada && (
                                 <Alert variant="success" className="mt-2 small py-2">
-                                    ✅ Conta: <strong>{contaEncontrada.numeroConta}</strong> - {contaEncontrada.cliente?.nomeCompleto}
+                                    ✅ Conta: <strong>{contaEncontrada.numeroConta}</strong> - {contaEncontrada.cliente?.nomeCompleto || dataUser.nome}
                                     <br />
                                     Saldo: <strong>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaEncontrada.saldo)}</strong>
                                 </Alert>
