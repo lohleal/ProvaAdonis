@@ -7,28 +7,28 @@ export default class AplicacaoFinanceiraPolicy extends BasePolicy {
   list(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].listAplicacaoFinanceira
+    return permissions[user.papelIdSeguro].listAplicacaoFinanceira
   }
   view(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].viewAplicacaoFinanceira
+    return permissions[user.papelIdSeguro].viewAplicacaoFinanceira
   }
   create(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].createAplicacaoFinanceira
+    return permissions[user.papelIdSeguro].createAplicacaoFinanceira
   }
 
   edit(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].editAplicacaoFinanceira
+    return permissions[user.papelIdSeguro].editAplicacaoFinanceira
   }
 
   delete(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].deleteAplicacaoFinanceira
+    return permissions[user.papelIdSeguro].deleteAplicacaoFinanceira
   }
 }

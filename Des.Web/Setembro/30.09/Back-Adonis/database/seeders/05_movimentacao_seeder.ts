@@ -6,27 +6,19 @@ export default class MovimentacaoSeeder extends BaseSeeder {
   public async run() {
     await Movimentacao.createMany([
       {
-        tipo: 'deposito',
-        valor: 1000.00,
+        tipo: 'transferencia',
+        valor: 150.0,
         contaOrigemId: 1,
-        contaDestinoId: null, 
-        descricao: 'Depósito inicial',
-        dataMovimentacao: DateTime.local(),
-      },
-      {
-        tipo: 'saque',
-        valor: 200.00,
-        contaOrigemId: 1,
-        contaDestinoId: null,
-        descricao: 'Saque caixa eletrônico',
+        contaDestinoId: 2,
+        cpfDestinatario: '12345678901',
         dataMovimentacao: DateTime.local(),
       },
       {
         tipo: 'transferencia',
-        valor: 150.00,
-        contaOrigemId: 1,
-        contaDestinoId: 2, 
-        descricao: 'Transferência PIX',
+        valor: 300.0,
+        contaOrigemId: 2,
+        contaDestinoId: 1,
+        cpfDestinatario: '98765432100',
         dataMovimentacao: DateTime.local(),
       },
     ])

@@ -7,28 +7,28 @@ export default class ClientePolicy extends BasePolicy {
   list(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].listCliente
+    return permissions[user.papelIdSeguro].listCliente
   }
   view(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].viewCliente
+    return permissions[user.papelIdSeguro].viewCliente
   }
   create(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].createCliente
+    return permissions[user.papelIdSeguro].createCliente
   }
 
   edit(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].editCliente
+    return permissions[user.papelIdSeguro].editCliente
   }
 
   delete(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].deleteCliente
+    return permissions[user.papelIdSeguro].deleteCliente
   }
 }

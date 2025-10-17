@@ -7,28 +7,28 @@ export default class ContaCorrentePolicy extends BasePolicy {
   list(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].listContaCorrente
+    return permissions[user.papelIdSeguro].listContaCorrente
   }
   view(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].viewContaCorrente
+    return permissions[user.papelIdSeguro].viewContaCorrente
   }
   create(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].createContaCorrente
+    return permissions[user.papelIdSeguro].createContaCorrente
   }
 
   edit(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].editContaCorrente
+    return permissions[user.papelIdSeguro].editContaCorrente
   }
 
   delete(user: User | null): AuthorizerResponse {
     // Se não há usuário logado, negar acesso
     if (!user) return false
-    return permissions[user.papel_id].deleteContaCorrente
+    return permissions[user.papelIdSeguro].deleteContaCorrente
   }
 }

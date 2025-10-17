@@ -11,6 +11,8 @@ export default class AuthController {
       const payload = await request.validateUsing(registerValidator)
       const user = await User.create(payload)
       
+      const papelId = user.papelIdSeguro
+
       const token = await User.accessTokens.create(user, ['*'], {
         name: 'Registration Token',
         expiresIn: '30 days',
@@ -30,7 +32,7 @@ export default class AuthController {
           value: token.value!.release(),
           expiresAt: token.expiresAt,
         },
-        permissions: { ...permissions[user.papel_id] },
+        permissions: { ...permissions[papelId] }, 
       })
     } catch (error) {
       return response.badRequest({
@@ -48,26 +50,28 @@ export default class AuthController {
 
       const user = await User.verifyCredentials(email, senha)
 
-      // Criar token de acesso
+      const papelId = user.papelIdSeguro
+
       const token = await User.accessTokens.create(user, ['*'], {
         name: 'Login Token',
         expiresIn: '30 days',
       })
 
-      logger.info(permissions[user.papel_id])
+      logger.info(permissions[papelId])
       return response.ok({
         message: 'Login realizado com sucesso',
         user: {
           id: user.id,
           nomeCompleto: user.nome_completo,
           email: user.email,
+          papel_id: user.papel_id, 
         },
         token: {
           type: 'bearer',
           value: token.value!.release(),
           expiresAt: token.expiresAt,
         },
-        permissions: { ...permissions[user.papel_id] },
+        permissions: { ...permissions[papelId] }, 
       })
     } catch (error) {
       return response.unauthorized({
@@ -76,7 +80,6 @@ export default class AuthController {
     }
   }
 
- 
   async logout({ auth, response }: HttpContext) {
     try {
       const user = auth.getUserOrFail()
@@ -100,6 +103,8 @@ export default class AuthController {
     try {
       const user = auth.getUserOrFail()
 
+      const papelId = user.papelIdSeguro
+
       return response.ok({
         user: {
           id: user.id,
@@ -109,6 +114,7 @@ export default class AuthController {
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
         },
+        permissions: { ...permissions[papelId] }, 
       })
     } catch (error) {
       return response.unauthorized({

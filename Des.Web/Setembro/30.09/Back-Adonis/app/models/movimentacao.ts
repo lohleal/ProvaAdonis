@@ -10,19 +10,22 @@ export default class Movimentacao extends BaseModel {
   declare id: number
 
   @column()
-  declare tipo: 'deposito' | 'saque' | 'transferencia' 
+  declare tipo: 'transferencia'
 
   @column()
   declare valor: number
 
+  @column()
+  declare descricao: string
+
   @column({ columnName: 'conta_origem_id' })
-  declare contaOrigemId: number | null
+  declare contaOrigemId: number
 
   @column({ columnName: 'conta_destino_id' })
-  declare contaDestinoId: number | null
+  declare contaDestinoId: number
 
-  @column()
-  declare descricao: string | null
+  @column({ columnName: 'cpf_destinatario' })
+  declare cpfDestinatario: string
 
   @column.dateTime({ columnName: 'data_movimentacao' })
   declare dataMovimentacao: DateTime

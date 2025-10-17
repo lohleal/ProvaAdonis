@@ -45,5 +45,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare cliente: BelongsTo<typeof Cliente>
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
-}
 
+  get papelIdSeguro() {
+    return this.papel_id || 2
+  }
+}

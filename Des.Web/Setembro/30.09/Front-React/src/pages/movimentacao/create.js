@@ -9,26 +9,19 @@ import { getPermissions } from '../../service/PermissionService';
 import { getDataUser } from '../../service/UserService';
 
 export default function CreateMovimentacao() {
-    const [tipo, setTipo] = useState('');
+    const [tipo, setTipo] = useState('transferencia');
     const [valor, setValor] = useState('');
-    const [numeroContaOrigem, setNumeroContaOrigem] = useState('');
-    const [numeroContaDestino, setNumeroContaDestino] = useState('');
+    const [cpfDestino, setCpfDestino] = useState('');
     const [descricao, setDescricao] = useState('');
-    const [dataMovimentacao, setDataMovimentacao] = useState('');
+    const [dataMovimentacao, setDataMovimentacao] = useState(new Date());
     const [contaOrigemEncontrada, setContaOrigemEncontrada] = useState(null);
     const [contaDestinoEncontrada, setContaDestinoEncontrada] = useState(null);
-    const [erroOrigem, setErroOrigem] = useState('');
     const [erroDestino, setErroDestino] = useState('');
     const [load, setLoad] = useState(true);
+
     const navigate = useNavigate();
     const permissions = getPermissions();
     const dataUser = getDataUser();
-
-    const tiposMovimentacao = [
-        { value: 'deposito', label: 'Depósito' },
-        { value: 'saque', label: 'Saque' },
-        { value: 'transferencia', label: 'Transferência' },
-    ];
 
     function verifyPermission() {
         if (!dataUser) navigate('/login');
@@ -38,130 +31,119 @@ export default function CreateMovimentacao() {
     async function buscarContaOrigemCliente() {
         try {
             const response = await Client.get('contasCorrentes');
-            
             if (response.data.data && response.data.data.length > 0) {
-                const contaDoUsuario = response.data.data.find(conta => 
-                    conta.cliente?.email === dataUser.email || 
-                    conta.email === dataUser.email ||
-                    conta.cliente_email === dataUser.email
+                const contaDoUsuario = response.data.data.find(c =>
+                    c.cliente?.email === dataUser.email
                 );
-                
-                if (contaDoUsuario) {
-                    setContaOrigemEncontrada(contaDoUsuario);
-                    setNumeroContaOrigem(contaDoUsuario.numeroConta);
-                    setErroOrigem('');
-                } else {
-                    setErroOrigem(`Nenhuma conta encontrada para o email: ${dataUser.email}`);
-                }
-            } else {
-                setErroOrigem('Nenhuma conta cadastrada no sistema.');
+                if (contaDoUsuario) setContaOrigemEncontrada(contaDoUsuario);
             }
-        } catch (error) {
-            setErroOrigem('Erro ao buscar conta de origem.');
+        } catch {
+            console.error("Erro ao buscar conta de origem");
         }
     }
 
-    async function buscarContaDestino(numeroConta) {
-        if (!numeroConta) {
+    async function buscarContaDestinoPorCPF(cpf) {
+        if (!cpf) {
             setContaDestinoEncontrada(null);
             setErroDestino('');
             return;
         }
 
         try {
-            const response = await Client.get(`contasCorrentes?numeroConta=${numeroConta}`);
-            if (response.data.data && response.data.data.length > 0) {
-                const conta = response.data.data[0];
-                
-                if (conta.numeroConta === contaOrigemEncontrada?.numeroConta) {
+            const response = await Client.get('contasCorrentes');
+            if (response.data.data) {
+                const contaEncontrada = response.data.data.find(c => c.cliente?.cpf === cpf);
+                if (!contaEncontrada) {
                     setContaDestinoEncontrada(null);
-                    setErroDestino('Não é possível transferir para a própria conta!');
-                } else {
-                    setContaDestinoEncontrada(conta);
-                    setErroDestino('');
+                    setErroDestino('❌ Nenhuma conta encontrada com esse CPF.');
+                    return;
                 }
-            } else {
-                setContaDestinoEncontrada(null);
-                setErroDestino('Conta de destino não encontrada');
+
+                if (contaEncontrada.cliente?.cpf === contaOrigemEncontrada?.cliente?.cpf) {
+                    setContaDestinoEncontrada(null);
+                    setErroDestino('❌ Não é possível transferir para sua própria conta.');
+                    return;
+                }
+
+                setContaDestinoEncontrada(contaEncontrada);
+                setErroDestino('');
             }
-        } catch (error) {
-            setContaDestinoEncontrada(null);
-            setErroDestino('Erro ao buscar conta de destino');
+        } catch {
+            setErroDestino('Erro ao buscar conta destino pelo CPF.');
         }
     }
 
     useEffect(() => {
         verifyPermission();
-        const agora = new Date();
-        const isoLocal = agora.toISOString().slice(0, 16);
-        setDataMovimentacao(isoLocal);
         buscarContaOrigemCliente();
         setTimeout(() => setLoad(false), 500);
     }, []);
 
     useEffect(() => {
-        if (tipo === 'transferencia') {
-            const timer = setTimeout(() => {
-                if (numeroContaDestino && numeroContaDestino.length >= 4) {
-                    buscarContaDestino(numeroContaDestino);
-                } else {
-                    setContaDestinoEncontrada(null);
-                    setErroDestino('');
-                }
-            }, 500);
+        if (cpfDestino.length === 11) {
+            const timer = setTimeout(() => buscarContaDestinoPorCPF(cpfDestino), 600);
             return () => clearTimeout(timer);
         }
-    }, [numeroContaDestino, tipo, contaOrigemEncontrada]);
+    }, [cpfDestino]);
 
     function sendData() {
-        if (!contaOrigemEncontrada) {
-            setErroOrigem('Conta de origem não encontrada.');
-            return;
-        }
-
-        if (tipo === 'transferencia' && !contaDestinoEncontrada) {
-            setErroDestino('Informe uma conta de destino válida.');
-            return;
-        }
-
-        if ((tipo === 'saque' || tipo === 'transferencia') && contaOrigemEncontrada.saldo < parseFloat(valor)) {
-            setErroOrigem('Saldo insuficiente na conta de origem.');
-            return;
-        }
+        if (!contaOrigemEncontrada) return alert("Conta de origem não encontrada.");
+        if (!contaDestinoEncontrada) return alert("Informe um CPF de destino válido.");
+        if (contaOrigemEncontrada.saldo < parseFloat(valor)) return alert("Saldo insuficiente.");
 
         const movimentacao = {
-            tipo,
+            tipo: tipo,
             valor: parseFloat(valor),
-            conta_origem_id: contaOrigemEncontrada?.id,
-            conta_destino_id: tipo === 'transferencia' ? contaDestinoEncontrada?.id : null,
+            conta_origem_id: contaOrigemEncontrada.id,
+            conta_destino_id: contaDestinoEncontrada.id,
             descricao,
-            data_movimentacao: new Date(dataMovimentacao).toISOString().slice(0, 19).replace('T', ' ')
+            data_movimentacao: dataMovimentacao.toISOString() // envia ISO 8601 completo
         };
 
         Client.post('movimentacoes', movimentacao)
             .then(() => navigate('/movimentacoes'))
-            .catch(console.error);
+            .catch(err => alert(err.response?.data?.message || "Erro ao criar movimentação"));
     }
-
-    const showContaDestino = tipo === 'transferencia';
 
     return (
         <>
             <NavigationBar />
-            {load
-                ? <Container className="d-flex justify-content-center mt-5">
+            {load ? (
+                <Container className="d-flex justify-content-center mt-5">
                     <OrbitProgress variant="spokes" color="#582770" size="medium" />
                 </Container>
-                : <Container className='mt-2'>
+            ) : (
+                <Container className='mt-3'>
+                    {contaOrigemEncontrada && (
+                        <Alert variant="success" className="small py-2">
+                            ✅ Conta origem: <strong>{contaOrigemEncontrada.numeroConta}</strong> — {contaOrigemEncontrada.cliente?.nomeCompleto}  
+                            <br />Saldo: <strong>
+                            {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
+                                .format(contaOrigemEncontrada.saldo)}
+                            </strong>
+                        </Alert>
+                    )}
+
                     <div className="row">
                         <div className="col-md-6">
-                            <Label>Tipo de Movimentação</Label>
-                            <Select value={tipo} onChange={e => setTipo(e.target.value)}>
-                                <option value="">Selecione o tipo</option>
-                                {tiposMovimentacao.map(t => (
-                                    <option key={t.value} value={t.value}>{t.label}</option>
-                                ))}
-                            </Select>
+                            <Label>CPF do Destinatário</Label>
+                            <Input
+                                type="text"
+                                value={cpfDestino}
+                                onChange={e => setCpfDestino(e.target.value.replace(/\D/g, ''))}
+                                maxLength="11"
+                                placeholder="Digite o CPF do destinatário"
+                            />
+                            {contaDestinoEncontrada && (
+                                <Alert variant="success" className="small py-2 mt-2">
+                                    ✅ Conta encontrada: <strong>{contaDestinoEncontrada.numeroConta}</strong> - {contaDestinoEncontrada.cliente?.nomeCompleto}
+                                </Alert>
+                            )}
+                            {erroDestino && (
+                                <Alert variant="danger" className="small py-2 mt-2">
+                                    {erroDestino}
+                                </Alert>
+                            )}
                         </div>
                         <div className="col-md-6">
                             <Label>Valor</Label>
@@ -169,88 +151,42 @@ export default function CreateMovimentacao() {
                                 type="number"
                                 value={valor}
                                 onChange={e => setValor(e.target.value)}
-                                placeholder="Digite o valor"
                                 step="0.01"
                                 min="0.01"
+                                placeholder="Digite o valor"
                             />
                         </div>
                     </div>
 
-                    {contaOrigemEncontrada && (
-                        <div className="row mt-3">
-                            <div className="col-md-12">
-                                <Label>Conta de Origem</Label>
-                                <Input
-                                    type="text"
-                                    value={contaOrigemEncontrada.numeroConta}
-                                    disabled
-                                />
-                                <Alert variant="success" className="mt-2 small py-2">
-                                    ✅ <strong>Conta do usuário logado:</strong> {contaOrigemEncontrada.numeroConta}<br />
-                                    <strong>Cliente:</strong> {contaOrigemEncontrada.cliente?.nomeCompleto || dataUser.nome}<br />
-                                    <strong>Saldo:</strong> {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaOrigemEncontrada.saldo)}
-                                </Alert>
-                            </div>
-                        </div>
-                    )}
+                    <div className="mt-3">
+                        <Label>Descrição</Label>
+                        <Input
+                            type="text"
+                            value={descricao}
+                            onChange={e => setDescricao(e.target.value)}
+                            placeholder="Descrição da transferência"
+                        />
+                    </div>
 
-                    {erroOrigem && (
-                        <Alert variant="danger" className="mt-3">
-                            ❌ {erroOrigem}
-                        </Alert>
-                    )}
-
-                    {showContaDestino && (
-                        <div className="row mt-3">
-                            <div className="col-md-12">
-                                <Label>Número da Conta de Destino</Label>
-                                <Input
-                                    type="text"
-                                    value={numeroContaDestino}
-                                    onChange={e => setNumeroContaDestino(e.target.value)}
-                                    placeholder="Digite o número da conta de destino"
-                                />
-                                {contaDestinoEncontrada && (
-                                    <Alert variant="success" className="mt-2 small py-2">
-                                        ✅ <strong>Conta destino encontrada:</strong> {contaDestinoEncontrada.numeroConta}<br />
-                                        <strong>Cliente:</strong> {contaDestinoEncontrada.cliente?.nomeCompleto}
-                                    </Alert>
-                                )}
-                                {erroDestino && (
-                                    <Alert variant="danger" className="mt-2 small py-2">
-                                        ❌ {erroDestino}
-                                    </Alert>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="row mt-3">
-                        <div className="col-md-8">
-                            <Label>Descrição</Label>
-                            <Input
-                                type="text"
-                                value={descricao}
-                                onChange={e => setDescricao(e.target.value)}
-                                placeholder="Digite uma descrição"
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <Label>Data da Movimentação</Label>
-                            <Input
-                                type="datetime-local"
-                                value={dataMovimentacao}
-                                onChange={e => setDataMovimentacao(e.target.value)}
-                            />
-                        </div>
+                    <div className="mt-3">
+                        <Label>Data e Hora da Movimentação</Label>
+                        <Input
+                            type="datetime-local"
+                            value={dataMovimentacao.toISOString().slice(0,16)}
+                            onChange={e => setDataMovimentacao(new Date(e.target.value))}
+                        />
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
                         <Submit value="Voltar" onClick={() => navigate('/movimentacoes')} />
-                        <Submit value="Cadastrar" onClick={sendData} disabled={!tipo || !valor || !contaOrigemEncontrada || (showContaDestino && !contaDestinoEncontrada)} />
+                        <Submit
+                            value="Cadastrar"
+                            onClick={sendData}
+                            disabled={!valor || !cpfDestino || !contaDestinoEncontrada}
+                        />
                     </div>
                 </Container>
-            }
+            )}
         </>
     );
 }
