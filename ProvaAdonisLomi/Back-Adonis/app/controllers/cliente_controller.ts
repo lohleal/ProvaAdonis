@@ -13,7 +13,7 @@ export default class ClienteController {
   async store({ request, response }: HttpContext) {
     const payload = request.only([
       'nome_completo', 'email', 'senha', 'cpf', 'cidade',
-      'estado', 'rua', 'numero_casa'
+      'estado', 'rua', 'numero_casa', 'saldo'
     ])
 
     const cliente = await ClienteService.criarCliente({

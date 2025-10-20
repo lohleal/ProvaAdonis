@@ -65,7 +65,7 @@ export default function CreateCliente() {
             numero_casa: numeroCasa,
             saldo: saldo ? parseFloat(saldo) : 0,
         };
-        console.log('Cliente payload no frontend (antes de enviar):', cliente);  
+        console.log('Cliente payload no frontend (antes de enviar):', cliente);
         Client.post('clientes', cliente)
             .then(() => navigate('/clientes'))
             .catch(console.error);
