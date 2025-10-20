@@ -17,16 +17,16 @@ export default function HomeCliente() {
 
     async function fetchData() {
         setLoad(true);
-    
+
         try {
             const [resClientes, resContas] = await Promise.all([
                 Client.get('clientes'),
                 Client.get('contasCorrentes')
             ]);
-    
+
             const clientes = resClientes.data.data;
             const contas = resContas.data.data;
-    
+
             // Combinar os dados
             const clientesComConta = clientes.map(c => {
                 const conta = contas.find(conta => conta.clienteId === c.id); // ajusta se o campo for diferente
@@ -36,20 +36,20 @@ export default function HomeCliente() {
                     conta_corrente: conta?.numeroConta || '—'
                 };
             });
-    
+
             setData(clientesComConta);
-    
+
         } catch (err) {
             console.error(err);
         } finally {
             setLoad(false);
         }
     }
-    
+
 
     function verifyPermission() {
-        if(!dataUser) navigate('/login');
-        else if(permissions.listCliente === 0) navigate(-1);
+        if (!dataUser) navigate('/login');
+        else if (permissions.listCliente === 0) navigate(-1);
     }
 
     useEffect(() => {
@@ -60,21 +60,30 @@ export default function HomeCliente() {
     return (
         <>
             <NavigationBar />
-            {load 
+            {load
                 ? <Container className="d-flex justify-content-center mt-5">
                     <OrbitProgress variant="spokes" color="#4D0F0F" size="medium" />
-                  </Container>
+                </Container>
                 : <Container className='mt-2'>
-                    <DataTable 
-                        title="Clientes Registrados" 
+                    <DataTable
+                        title="Clientes"
                         rows={['Nome', 'Email', 'CPF', 'Conta Corrente', 'Ações']}
                         hide={[false, false, false, false, false]}
                         data={data}
-                        keys={['nomeCompleto', 'email', 'cpf', 'conta_corrente']} 
+                        keys={['nomeCompleto', 'email', 'cpf', 'conta_corrente']}
                         resource='clientes'
                         crud={['viewCliente', 'createCliente', 'editCliente', 'deleteCliente']}
+                        showCreateButton={false}
+                        customButtons={[
+                            {
+                                label: 'Novo Cliente',
+                                to: '/clientes/create',
+                                permission: 'createCliente'
+                            }
+                        ]}
                     />
-                  </Container>
+
+                </Container>
             }
         </>
     )

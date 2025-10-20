@@ -151,7 +151,7 @@ export default function CreateAplicacaoFinanceira() {
                     <div className="mt-3 d-flex gap-2">
                         <Submit value="Voltar" onClick={() => navigate('/aplicacoesFinanceiras')} />
                         <Submit
-                            value="Cadastrar"
+                            value="Aplicar"
                             onClick={sendData}
                             disabled={!contaEncontrada || !tipo || !valor}
                         />

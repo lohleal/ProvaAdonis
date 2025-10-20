@@ -26,9 +26,9 @@ export default function IndexAplicacaoFinanceira() {
                             style: 'currency',
                             currency: 'BRL'
                         }).format(a.valor),
-                        tipo_formatado: a.tipo === 'poupanca' ? 'Poupança' : 
-                                      a.tipo === 'titulos_governo' ? 'Títulos do Governo' : 
-                                      'Ações',
+                        tipo_formatado: a.tipo === 'poupanca' ? 'Poupança' :
+                            a.tipo === 'titulos_governo' ? 'Títulos do Governo' :
+                                'Ações',
                         status_formatado: a.status === 'ativa' ? 'Ativa' : 'Resgatada',
                         conta_corrente_info: a.contaCorrente ? `${a.contaCorrente.numeroConta} - ${a.contaCorrente.cliente?.nomeCompleto}` : '—',
                         data_criacao: new Date(a.createdAt).toLocaleDateString('pt-BR')
@@ -41,8 +41,8 @@ export default function IndexAplicacaoFinanceira() {
     }
 
     function verifyPermission() {
-        if(!dataUser) navigate('/login');
-        else if(permissions.listAplicacaoFinanceira === 0) navigate(-1);
+        if (!dataUser) navigate('/login');
+        else if (permissions.listAplicacaoFinanceira === 0) navigate(-1);
     }
 
     useEffect(() => {
@@ -53,21 +53,30 @@ export default function IndexAplicacaoFinanceira() {
     return (
         <>
             <NavigationBar />
-            {load 
+            {load
                 ? <Container className="d-flex justify-content-center mt-5">
                     <OrbitProgress variant="spokes" color="#4d0f0f" size="medium" />
-                  </Container>
+                </Container>
                 : <Container className='mt-2'>
-                    <DataTable 
-                        title="Aplicações Financeiras Registradas" 
+                    <DataTable
+                        title="Registro de Aplicações Financeiras"
                         rows={['Tipo', 'Valor', 'Status', 'Conta Corrente', 'Data Criação', 'Ações']}
                         hide={[false, false, false, false, false, false]}
                         data={data}
-                        keys={['tipo_formatado', 'valor_formatado', 'status_formatado', 'conta_corrente_info', 'data_criacao']} 
+                        keys={['tipo_formatado', 'valor_formatado', 'status_formatado', 'conta_corrente_info', 'data_criacao']}
                         resource='aplicacoesFinanceiras'
                         crud={['viewAplicacaoFinanceira', 'createAplicacaoFinanceira', 'editAplicacaoFinanceira', 'deleteAplicacaoFinanceira']}
+                        showCreateButton={false}  // Desativa o botão padrão "Cadastrar"
+                        customButtons={[
+                            {
+                                label: 'Aplicar',
+                                to: '/aplicacoesFinanceiras/create',   // aqui você define a rota do formulário
+                                permission: 'createAplicacaoFinanceira' // a permissão que o usuário precisa ter para ver o botão
+                            }
+                        ]}
                     />
-                  </Container>
+
+                </Container>
             }
         </>
     )

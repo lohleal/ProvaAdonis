@@ -154,7 +154,7 @@ export default function CreateMovimentacao() {
                     <div className="mt-3 d-flex gap-2">
                         <Submit value="Voltar" onClick={() => navigate('/movimentacoes')} />
                         <Submit
-                            value="Cadastrar"
+                            value="Transferir"
                             onClick={sendData}
                             disabled={!valor || !cpfDestino || !contaDestinoEncontrada}
                         />

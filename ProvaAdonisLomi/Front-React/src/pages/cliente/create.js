@@ -65,7 +65,7 @@ export default function CreateCliente() {
             numero_casa: numeroCasa,
             saldo: saldo ? parseFloat(saldo) : 0,
         };
-        console.log('Cliente payload no frontend (antes de enviar):', cliente);  // Adicione isso
+        console.log('Cliente payload no frontend (antes de enviar):', cliente);  
         Client.post('clientes', cliente)
             .then(() => navigate('/clientes'))
             .catch(console.error);
@@ -139,6 +139,7 @@ export default function CreateCliente() {
 
                         {/* Coluna 2 - Endereço */}
                         <div className="col-md-6">
+                            <Label>ENDEREÇO</Label>
                             <Label>Estado</Label>
                             <Select value={estado} onChange={e => setEstado(e.target.value)}>
                                 <option value="">Selecione o estado</option>

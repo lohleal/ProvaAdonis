@@ -10,7 +10,7 @@ export const permissions = [
     viewContaCorrente: false,
     createContaCorrente: false,
     editContaCorrente: false,
-    deleteContaCorrente: false,
+    deleteContaCorrente: true,
 
     listMovimentacao: false,
     viewMovimentacao: false,
@@ -41,8 +41,8 @@ export const permissions = [
     listMovimentacao: true,
     viewMovimentacao: true,
     createMovimentacao: false,
-    editMovimentacao: true,
-    deleteMovimentacao: true,
+    editMovimentacao: false,
+    deleteMovimentacao: false,
 
     listAplicacaoFinanceira: true,
     viewAplicacaoFinanceira: true,

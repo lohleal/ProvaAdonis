@@ -27,10 +27,10 @@ export default function IndexMovimentacao() {
                             style: 'currency',
                             currency: 'BRL'
                         }).format(m.valor),
-                        tipo_formatado: m.tipo === 'deposito' ? 'Depósito' : 
-                                        m.tipo === 'saque' ? 'Saque' : 
-                                        m.tipo === 'transferencia' ? 'Transferência' : 
-                                        'Aplicação',
+                        tipo_formatado: m.tipo === 'deposito' ? 'Depósito' :
+                            m.tipo === 'saque' ? 'Saque' :
+                                m.tipo === 'transferencia' ? 'Transferência' :
+                                    'Aplicação',
                         data_formatada: new Date(m.dataMovimentacao).toLocaleDateString('pt-BR'),
                         conta_origem: m.contaOrigem ? `${m.contaOrigem.numeroConta} - ${m.contaOrigem.cliente?.cpf || '—'}` : '—',
                         conta_destino: m.contaDestino ? `${m.contaDestino.numeroConta} - ${m.contaDestino.cliente?.cpf || '—'}` : '—'
@@ -40,11 +40,11 @@ export default function IndexMovimentacao() {
                 .catch(console.error)
                 .finally(() => setLoad(false));
         }, 500);
-    }    
+    }
 
     function verifyPermission() {
-        if(!dataUser) navigate('/login');
-        else if(permissions.listMovimentacao === 0) navigate(-1);
+        if (!dataUser) navigate('/login');
+        else if (permissions.listMovimentacao === 0) navigate(-1);
     }
 
     useEffect(() => {
@@ -55,21 +55,30 @@ export default function IndexMovimentacao() {
     return (
         <>
             <NavigationBar />
-            {load 
+            {load
                 ? <Container className="d-flex justify-content-center mt-5">
                     <OrbitProgress variant="spokes" color="#4d0f0f" size="medium" />
-                  </Container>
+                </Container>
                 : <Container className='mt-2'>
-                    <DataTable 
-                        title="Movimentações Registradas" 
+                    <DataTable
+                        title="Registro de Movimentações"
                         rows={['Tipo', 'Valor', 'Conta Origem', 'Conta Destino', 'Ações']}
                         hide={[false, false, false, false, false]}
                         data={data}
-                        keys={['tipo_formatado', 'valor_formatado', 'conta_origem', 'conta_destino']} 
+                        keys={['tipo_formatado', 'valor_formatado', 'conta_origem', 'conta_destino']}
                         resource='movimentacoes'
                         crud={['viewMovimentacao', 'createMovimentacao', 'editMovimentacao', 'deleteMovimentacao']}
+                        showCreateButton={false}
+                        customButtons={[
+                            {
+                                label: 'Transferir',
+                                to: '/movimentacoes/create',
+                                permission: 'createMovimentacao'
+                            }
+                        ]}
                     />
-                  </Container>
+
+                </Container>
             }
         </>
     )
