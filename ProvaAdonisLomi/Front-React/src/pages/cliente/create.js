@@ -71,6 +71,19 @@ export default function CreateCliente() {
             .catch(console.error);
     }
 
+    function formatCPF(value) {
+        // Remove tudo que não for número
+        value = value.replace(/\D/g, '');
+
+        // Aplica a formatação 000.000.000-00
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+        return value;
+    }
+
+
     return (
         <>
             <NavigationBar />
@@ -78,8 +91,9 @@ export default function CreateCliente() {
                 ? <Container className="d-flex justify-content-center mt-5">
                     <OrbitProgress variant="spokes" color="#4d0f0f" size="medium" />
                 </Container>
-                : <Container className='mt-2'>
+                : <Container className="mt-2">
                     <div className="row">
+                        {/* Coluna 1 - Dados pessoais */}
                         <div className="col-md-6">
                             <Label>Nome Completo</Label>
                             <Input
@@ -88,8 +102,7 @@ export default function CreateCliente() {
                                 onChange={e => setNomeCompleto(e.target.value)}
                                 placeholder="Digite o nome completo"
                             />
-                        </div>
-                        <div className="col-md-6">
+
                             <Label>Email</Label>
                             <Input
                                 type="email"
@@ -97,11 +110,7 @@ export default function CreateCliente() {
                                 onChange={e => setEmail(e.target.value)}
                                 placeholder="Digite o email"
                             />
-                        </div>
-                    </div>
 
-                    <div className="row mt-3">
-                        <div className="col-md-6">
                             <Label>Senha</Label>
                             <Input
                                 type="password"
@@ -109,19 +118,26 @@ export default function CreateCliente() {
                                 onChange={e => setSenha(e.target.value)}
                                 placeholder="Digite a senha"
                             />
-                        </div>
-                        <div className="col-md-6">
+
                             <Label>CPF</Label>
                             <Input
                                 type="text"
                                 value={cpf}
-                                onChange={e => setCpf(e.target.value)}
+                                onChange={e => setCpf(formatCPF(e.target.value))}
                                 placeholder="Digite o CPF"
                             />
-                        </div>
-                    </div>
 
-                    <div className="row mt-3">
+                            <Label>Saldo Inicial</Label>
+                            <Input
+                                type="number"
+                                value={saldo}
+                                onChange={e => setSaldo(e.target.value)}
+                                placeholder="Digite o saldo inicial"
+                                step="0.01"
+                            />
+                        </div>
+
+                        {/* Coluna 2 - Endereço */}
                         <div className="col-md-6">
                             <Label>Estado</Label>
                             <Select value={estado} onChange={e => setEstado(e.target.value)}>
@@ -132,9 +148,7 @@ export default function CreateCliente() {
                                     </option>
                                 ))}
                             </Select>
-                        </div>
 
-                        <div className="col-md-6">
                             <Label>Cidade</Label>
                             <Select value={cidade} onChange={e => setCidade(e.target.value)}>
                                 <option value="">Selecione a cidade</option>
@@ -142,11 +156,7 @@ export default function CreateCliente() {
                                     <option key={c.name} value={c.name}>{c.name}</option>
                                 ))}
                             </Select>
-                        </div>
-                    </div>
 
-                    <div className="row mt-3">
-                        <div className="col-md-8">
                             <Label>Rua</Label>
                             <Input
                                 type="text"
@@ -154,8 +164,7 @@ export default function CreateCliente() {
                                 onChange={e => setRua(e.target.value)}
                                 placeholder="Digite a rua"
                             />
-                        </div>
-                        <div className="col-md-4">
+
                             <Label>Número</Label>
                             <Input
                                 type="text"
@@ -164,19 +173,6 @@ export default function CreateCliente() {
                                 placeholder="Nº"
                             />
                         </div>
-                        <div className="row mt-3">
-                            <div className="col-md-6">
-                                <Label>Saldo Inicial</Label>
-                                <Input
-                                    type="number"
-                                    value={saldo}
-                                    onChange={e => setSaldo(e.target.value)}
-                                    placeholder="Digite o saldo inicial"
-                                    step="0.01"
-                                />
-                            </div>
-                        </div>
-
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
@@ -184,6 +180,7 @@ export default function CreateCliente() {
                         <Submit value="Cadastrar" onClick={sendData} />
                     </div>
                 </Container>
+
             }
         </>
     );

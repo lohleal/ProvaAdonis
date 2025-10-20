@@ -20,6 +20,7 @@ export default function EditCliente() {
     const [estado, setEstado] = useState(cliente.estado || '');
     const [rua, setRua] = useState(cliente.rua || '');
     const [numeroCasa, setNumeroCasa] = useState(cliente.numeroCasa || '');
+    const [saldo, setSaldo] = useState('');
     const [load, setLoad] = useState(true);
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
@@ -156,6 +157,14 @@ export default function EditCliente() {
                                 placeholder="Nº"
                             />
                         </div>
+                        <Label>Saldo Inicial</Label>
+                            <Input
+                                type="number"
+                                value={saldo}
+                                onChange={e => setSaldo(e.target.value)}
+                                placeholder="Digite o saldo inicial"
+                                step="0.01"
+                            />
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
