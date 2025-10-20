@@ -28,7 +28,7 @@ export default class ClienteService {
     // 🔹 Cria a conta corrente
     await ContaCorrenteService.criarConta({
         clienteId: cliente.id,
-        numeroAgencia: '0001',
+        numeroAgencia: '2023',
         saldo: Number(saldo) || 0  // Garante número
     });
 

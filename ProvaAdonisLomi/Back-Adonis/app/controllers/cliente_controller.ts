@@ -45,7 +45,7 @@ export default class ClienteController {
   async update({ params, request, response }: HttpContext) {
     const payload = request.only([
       'nome_completo', 'email', 'senha', 'cpf', 'cidade',
-      'estado', 'rua', 'numero_casa'
+      'estado', 'rua', 'numero_casa', 'saldo'
     ])
 
     const cliente = await ClienteService.atualizarCliente(params.id, payload)
