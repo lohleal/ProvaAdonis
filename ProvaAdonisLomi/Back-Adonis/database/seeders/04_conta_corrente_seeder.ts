@@ -2,17 +2,30 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import ContaCorrente from '#models/conta_corrente'
 import Cliente from '#models/cliente'
 
+function gerarNumeroContaAleatorio(): string {
+  const parte1 = Math.floor(1000 + Math.random() * 9000)
+  const parte2 = Math.floor(Math.random() * 10)
+  return `${parte1}-${parte2}`
+}
+
 export default class ContaCorrenteSeeder extends BaseSeeder {
   public async run() {
-    // Busca clientes já cadastrados
     const clientes = await Cliente.all()
 
-    for (let i = 0; i < clientes.length; i++) {
+    for (const cliente of clientes) {
+      let numeroConta: string
+
+      do {
+        numeroConta = gerarNumeroContaAleatorio()
+      } while (
+        await ContaCorrente.query().where('numero_conta', numeroConta).first()
+      )
+
       await ContaCorrente.create({
-        numeroConta: `1000${i + 1}`,
-        numeroAgencia: '0001',
-        saldo: 1000, // saldo inicial
-        clienteId: clientes[i].id,
+        numeroConta,
+        numeroAgencia: '2023',
+        saldo: 1000,
+        clienteId: cliente.id,
       })
     }
   }
