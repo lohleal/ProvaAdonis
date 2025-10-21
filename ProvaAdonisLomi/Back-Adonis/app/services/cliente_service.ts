@@ -1,4 +1,5 @@
 import Cliente from "#models/cliente"
+import User from "#models/user"
 import ContaCorrenteService from "./conta_corrente_service.js"
 
 export default class ClienteService {
@@ -22,18 +23,16 @@ export default class ClienteService {
     console.log('ClientePayload (sem saldo):', clientePayload);
     console.log('Saldo para conta:', saldo);
 
-    // 🔹 Cria o cliente
     const cliente = await Cliente.create(clientePayload);
 
-    // 🔹 Cria a conta corrente
     await ContaCorrenteService.criarConta({
-        clienteId: cliente.id,
-        numeroAgencia: '2023',
-        saldo: Number(saldo) || 0  // Garante número
+      clienteId: cliente.id,
+      numeroAgencia: '2023',
+      saldo: Number(saldo) || 0
     });
 
     return cliente.toJSON();
-}
+  }
 
   static async atualizarCliente(id: number, payload: any) {
     const cliente = await Cliente.findOrFail(id)
@@ -48,5 +47,25 @@ export default class ClienteService {
     await cliente.delete()
     return data
   }
+
+  static async listarParaUsuario(user: User) {
+    if (user.papel_id === 1) {
+      // gerente: pega todos
+      return await this.listarClientes()
+    } else if (user.papel_id === 2) {
+      let cliente
+
+      if (user.cliente_id) {
+        // cliente com cliente_id preenchido
+        cliente = await this.buscarCliente(user.cliente_id)
+      } else {
+        // cliente sem cliente_id → busca pelo email
+        cliente = await Cliente.query().where('email', user.email).preload('contas').firstOrFail()
+      }
+
+      return [cliente]
+    }
+  }
+
 }
 

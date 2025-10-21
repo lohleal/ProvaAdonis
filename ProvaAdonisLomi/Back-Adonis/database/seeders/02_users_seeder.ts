@@ -17,5 +17,12 @@ export default class UserSeeder extends BaseSeeder {
       senha: '123',
       papel_id: 2, 
     })
+
+    await User.create({
+      nome_completo: 'Ka', 
+      email: 'ka@gmail.com',
+      senha: '123',
+      papel_id: 2, 
+    })
   }
 }

@@ -5,9 +5,17 @@ import Hash from '@adonisjs/core/services/hash'
 import Cliente from '#models/cliente'
 
 export default class ClienteController {
-  async index({ response }: HttpContext) {
-    const clientes = await ClienteService.listarClientes()
-    return response.status(200).json({ message: 'OK', data: clientes })
+
+
+  async index({ auth, response }: HttpContext) {
+    const user = auth.user!
+
+    try {
+      const clientes = await ClienteService.listarParaUsuario(user)
+      return response.status(200).json({ message: 'OK', data: clientes })
+    } catch (error) {
+      return response.status(500).json({ message: 'Erro ao buscar clientes', error: error.message })
+    }
   }
 
   async store({ request, response }: HttpContext) {
@@ -37,10 +45,10 @@ export default class ClienteController {
       .where('id', params.id)
       .preload('contas')
       .firstOrFail()
-  
+
     return response.ok({ data: cliente })
   }
-  
+
 
   async update({ params, request, response }: HttpContext) {
     const payload = request.only([
@@ -74,5 +82,8 @@ export default class ClienteController {
     return response.status(200).json({ message: 'OK', data: cliente })
   }
 
-  
+
 }
+
+
+
