@@ -84,7 +84,7 @@ const router = createBrowserRouter([
         element: <MovimentacoesEdit />,
     },
 
-    // Aplicações Financeiras
+    //Aplicações Financeiras
     {
         path: "/aplicacoesFinanceiras", 
         element: <AplicacoesFinanceiras />,

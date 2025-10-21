@@ -26,13 +26,13 @@ export default class ClienteController {
 
     const cliente = await ClienteService.criarCliente({
       ...payload,
-      senha: await Hash.make(payload.senha),
+      senha: await (payload.senha),
     })
 
     await User.create({
       nome_completo: payload.nome_completo,
       email: payload.email,
-      senha: await Hash.make(payload.senha),
+      senha: await (payload.senha),
       papel_id: 2,
       cliente_id: cliente.id,
     })

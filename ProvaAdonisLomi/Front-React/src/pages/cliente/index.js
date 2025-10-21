@@ -48,7 +48,7 @@ export default function HomeCliente() {
             setData(clientesComConta);
 
         } catch (err) {
-            console.error(err);
+           
         } finally {
             setLoad(false);
         }

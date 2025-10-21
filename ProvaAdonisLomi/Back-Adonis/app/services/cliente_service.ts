@@ -14,7 +14,7 @@ export default class ClienteService {
   }
 
   static async criarCliente(payload: any) {
-    console.log('🔹 Payload RECEBIDO no backend (bruto):', JSON.stringify(payload, null, 2));  // Adicione no início
+    console.log('🔹 Payload RECEBIDO no backend (bruto):', JSON.stringify(payload, null, 2));  
     const { saldo = 0, ...clientePayload } = payload;
     console.log('🔹 Saldo extraído:', saldo, 'Tipo:', typeof saldo);
     console.log('🔹 ClientePayload (sem saldo):', JSON.stringify(clientePayload, null, 2));

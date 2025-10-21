@@ -156,19 +156,19 @@ export default function CreateMovimentacao() {
       ) : (
         <Container className="mt-3">
           <div className="col-md-6">
-            <Label>Chave Pix (CPF ou N° da Conta)</Label>
+            <Label>Chave Pix</Label>
             <Input
               type="text"
               value={cpfDestino}
               onChange={(e) => setCpfDestino(e.target.value)}
-              placeholder="Digite CPF ou número da conta"
+              placeholder="Digite o número da conta"
             />
             {contaDestinoEncontrada && (
-              <Alert variant="success" className="small py-2 mt-2">
-                Conta encontrada:{' '}
+              <div variant="success" className="small py-2 mt-2">
+                Conta corrente:{' '}
                 <strong>{contaDestinoEncontrada.numeroConta}</strong> -{' '}
                 {contaDestinoEncontrada.cliente?.nomeCompleto}
-              </Alert>
+              </div>
             )}
             {erroDestino && (
               <Alert variant="danger" className="small py-2 mt-2">

@@ -6,9 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.enum('tipo', ['poupanca', 'titulos_governo', 'acoes']).notNullable()
       table.decimal('valor', 12, 2).notNullable()
-      table.enum('status', ['ativa', 'resgatada']).defaultTo('ativa')
       table.integer('conta_corrente_id')
         .unsigned()
         .references('id')

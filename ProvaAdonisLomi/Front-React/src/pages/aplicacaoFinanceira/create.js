@@ -9,9 +9,7 @@ import { getPermissions } from '../../service/PermissionService';
 import { getDataUser } from '../../service/UserService';
 
 export default function CreateAplicacaoFinanceira() {
-    const [tipo, setTipo] = useState('');
     const [valor, setValor] = useState('');
-    const [status, setStatus] = useState('ativa');
     const [contaEncontrada, setContaEncontrada] = useState(null);
     const [erro, setErro] = useState('');
     const [load, setLoad] = useState(true);
@@ -20,16 +18,6 @@ export default function CreateAplicacaoFinanceira() {
     const permissions = getPermissions();
     const dataUser = getDataUser();
 
-    const tiposAplicacao = [
-        { value: 'poupanca', label: 'Poupança' },
-        { value: 'titulos_governo', label: 'Títulos do Governo' },
-        { value: 'acoes', label: 'Ações' }
-    ];
-
-    const statusAplicacao = [
-        { value: 'ativa', label: 'Ativa' },
-        { value: 'resgatada', label: 'Resgatada' }
-    ];
 
     function verifyPermission() {
         if (!dataUser) navigate('/login');
@@ -73,14 +61,14 @@ export default function CreateAplicacaoFinanceira() {
         }
 
         const aplicacaoFinanceira = {
-            tipo,
+
             valor: parseFloat(valor),
             conta_corrente_id: contaEncontrada.id,
-            status
+
         };
 
         Client.post('aplicacoesFinanceiras', aplicacaoFinanceira)
-            .then(() => navigate('/aplicacoesFinanceiras'))
+            .then(() => navigate('/movimentacoes'))
             .catch(console.error);
     }
 
@@ -94,16 +82,10 @@ export default function CreateAplicacaoFinanceira() {
             ) : (
                 <Container className='mt-2'>
                     <div className="row">
-                        <div className="col-md-6">
-                            <Label>Tipo de Aplicação</Label>
-                            <Select value={tipo} onChange={e => setTipo(e.target.value)}>
-                                <option value="">Selecione o tipo</option>
-                                {tiposAplicacao.map(t => (
-                                    <option key={t.value} value={t.value}>{t.label}</option>
-                                ))}
-                            </Select>
-                        </div>
-                        <div className="col-md-6">
+                        <div className="col-md-12">
+
+                        </div >
+                        <div className="col-md-12">
                             <Label>Valor</Label>
                             <Input
                                 type="number"
@@ -117,7 +99,7 @@ export default function CreateAplicacaoFinanceira() {
                     </div>
 
                     <div className="row mt-3">
-                        <div className="col-md-6">
+                        <div className="col-md-12">
                             <Label>Número da Conta Corrente</Label>
                             <Input
                                 type="text"
@@ -125,35 +107,35 @@ export default function CreateAplicacaoFinanceira() {
                                 disabled
                             />
                             {contaEncontrada && (
-                                <Alert variant="success" className="mt-2 small py-2">
-                                    ✅ Conta: <strong>{contaEncontrada.numeroConta}</strong> - {contaEncontrada.cliente?.nomeCompleto || dataUser.nome}
-                                    <br />
+                                <div
+
+                                    style={{
+                                        padding: '5px 10px',
+                                        fontSize: '14px',
+                                        lineHeight: '1.2',
+                                        display: 'inline-block',
+                                        minWidth: 'auto'
+                                    }}
+                                >
                                     Saldo: <strong>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contaEncontrada.saldo)}</strong>
-                                </Alert>
+                                </div>
                             )}
+
                             {erro && (
                                 <Alert variant="danger" className="mt-2 small py-2">
-                                    ❌ {erro}
+                                    {erro}
                                 </Alert>
                             )}
                         </div>
 
-                        <div className="col-md-6">
-                            <Label>Status</Label>
-                            <Select value={status} onChange={e => setStatus(e.target.value)}>
-                                {statusAplicacao.map(s => (
-                                    <option key={s.value} value={s.value}>{s.label}</option>
-                                ))}
-                            </Select>
-                        </div>
                     </div>
 
                     <div className="mt-3 d-flex gap-2">
-                        <Submit value="Voltar" onClick={() => navigate('/aplicacoesFinanceiras')} />
+                        <Submit value="Voltar" onClick={() => navigate('/movimentacoes')} />
                         <Submit
                             value="Aplicar"
                             onClick={sendData}
-                            disabled={!contaEncontrada || !tipo || !valor}
+                            
                         />
                     </div>
                 </Container>
@@ -161,4 +143,3 @@ export default function CreateAplicacaoFinanceira() {
         </>
     );
 }
-

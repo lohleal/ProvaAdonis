@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+/*import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Container } from 'react-bootstrap';
 import { OrbitProgress } from "react-loading-indicators";
@@ -29,7 +29,6 @@ export default function IndexAplicacaoFinanceira() {
                         tipo_formatado: a.tipo === 'poupanca' ? 'Poupança' :
                             a.tipo === 'titulos_governo' ? 'Títulos do Governo' :
                                 'Ações',
-                        status_formatado: a.status === 'ativa' ? 'Ativa' : 'Resgatada',
                         conta_corrente_info: a.contaCorrente ? `${a.contaCorrente.numeroConta} - ${a.contaCorrente.cliente?.nomeCompleto}` : '—',
                         data_criacao: new Date(a.createdAt).toLocaleDateString('pt-BR')
                     }));
@@ -66,12 +65,12 @@ export default function IndexAplicacaoFinanceira() {
                         keys={['tipo_formatado', 'valor_formatado', 'status_formatado', 'conta_corrente_info', 'data_criacao']}
                         resource='aplicacoesFinanceiras'
                         crud={['viewAplicacaoFinanceira', 'createAplicacaoFinanceira', 'editAplicacaoFinanceira', 'deleteAplicacaoFinanceira']}
-                        showCreateButton={false}  // Desativa o botão padrão "Cadastrar"
+                        showCreateButton={false}  
                         customButtons={[
                             {
                                 label: 'Aplicar',
-                                to: '/aplicacoesFinanceiras/create',   // aqui você define a rota do formulário
-                                permission: 'createAplicacaoFinanceira' // a permissão que o usuário precisa ter para ver o botão
+                                to: '/aplicacoesFinanceiras/create',   
+                                permission: 'createAplicacaoFinanceira' 
                             }
                         ]}
                     />
@@ -80,4 +79,4 @@ export default function IndexAplicacaoFinanceira() {
             }
         </>
     )
-}
+}*/
