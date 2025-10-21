@@ -6,3 +6,8 @@ export const Image = styled.img`
     border-radius: 50%;
     margin-bottom: 12px;
 `
+
+export const Container = styled.img`
+    font-size: 48px;
+    
+`
