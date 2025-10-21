@@ -54,13 +54,13 @@ export default function IndexContaCorrente() {
       ) : (
         <Container className='mt-2'>
           <DataTable
-            title="Contas Corrente"
+            title="Contas Correntes"
             rows={['Nº Conta', 'Agência', 'Saldo', 'Cliente', 'Ações']}
             hide={[false, false, false, false, false]}
             data={data}
             keys={['numeroConta', 'numeroAgencia', 'saldo_formatado', 'cliente_cpf']}
             resource='contasCorrentes'
-            crud={['viewContaCorrente', 'createContaCorrente', 'editContaCorrente', 'deleteContaCorrente']}
+            crud={['viewContaCorrente', 'createContaCorrente', 0, 'deleteContaCorrente']}
             showCreateButton={false}
           />
         </Container>

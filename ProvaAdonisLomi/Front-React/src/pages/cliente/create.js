@@ -100,7 +100,7 @@ export default function CreateCliente() {
                                 type="text"
                                 value={nomeCompleto}
                                 onChange={e => setNomeCompleto(e.target.value)}
-                                placeholder="Digite o nome completo"
+                                
                             />
 
                             <Label>Email</Label>
@@ -108,7 +108,7 @@ export default function CreateCliente() {
                                 type="email"
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
-                                placeholder="Digite o email"
+                                
                             />
 
                             <Label>Senha</Label>
@@ -116,7 +116,7 @@ export default function CreateCliente() {
                                 type="password"
                                 value={senha}
                                 onChange={e => setSenha(e.target.value)}
-                                placeholder="Digite a senha"
+                                
                             />
 
                             <Label>CPF</Label>
@@ -124,7 +124,7 @@ export default function CreateCliente() {
                                 type="text"
                                 value={cpf}
                                 onChange={e => setCpf(formatCPF(e.target.value))}
-                                placeholder="Digite o CPF"
+                                
                             />
 
                             <Label>Saldo Inicial</Label>
@@ -132,7 +132,7 @@ export default function CreateCliente() {
                                 type="number"
                                 value={saldo}
                                 onChange={e => setSaldo(e.target.value)}
-                                placeholder="Digite o saldo inicial"
+                                
                                 step="0.01"
                             />
                         </div>
@@ -163,7 +163,7 @@ export default function CreateCliente() {
                                 type="text"
                                 value={rua}
                                 onChange={e => setRua(e.target.value)}
-                                placeholder="Digite a rua"
+                                
                             />
 
                             <Label>Número</Label>
@@ -171,7 +171,7 @@ export default function CreateCliente() {
                                 type="text"
                                 value={numeroCasa}
                                 onChange={e => setNumeroCasa(e.target.value)}
-                                placeholder="Nº"
+                                
                             />
                         </div>
                     </div>

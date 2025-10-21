@@ -38,7 +38,7 @@ export default function EditCliente() {
             cidade,
             estado,
             rua,
-            numero_casa: numeroCasa
+            numero_casa: numeroCasa,
         };
 
         if (senha) {
@@ -98,11 +98,11 @@ export default function EditCliente() {
                             <Label>Email</Label>
                             <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Digite o email" />
                             <Label>Senha</Label>
-                            <Input type="password" value={senha} onChange={e => setSenha(e.target.value)} placeholder="Digite a senha" />
+                            <Input type="password" value={senha} onChange={e => setSenha(e.target.value)} placeholder="Digite a nova senha" />
                             <Label>CPF</Label>
                             <Input type="text" value={cpf} onChange={e => setCpf(formatCPF(e.target.value))} placeholder="Digite o CPF" />
                             <Label>Saldo Inicial</Label>
-                            <Input type="number" value={saldo} onChange={e => setSaldo(e.target.value)} placeholder="Digite o saldo inicial" step="0.01" />
+                            <Input type="number" value={saldo} onChange={e => setSaldo(e.target.value)} placeholder="Digite o novo saldo" step="0.01" />
                         </div>
                         <div className="col-md-6">
                             <Label>ENDEREÇO</Label>
