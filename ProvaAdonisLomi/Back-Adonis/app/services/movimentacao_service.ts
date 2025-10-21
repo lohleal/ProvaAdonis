@@ -52,9 +52,6 @@ export default class MovimentacaoService {
   static async atualizarMovimentacao(id: number, payload: any) {
     const movimentacao = await Movimentacao.findOrFail(id)
 
-    /*movimentacao.merge({
-      dataMovimentacao: payload.data_movimentacao || movimentacao.dataMovimentacao,
-    })*/
 
     await movimentacao.save()
     await movimentacao.load('contaOrigem', (query) => query.preload('cliente'))

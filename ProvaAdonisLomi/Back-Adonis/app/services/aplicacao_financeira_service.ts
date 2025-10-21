@@ -35,28 +35,6 @@ export default class AplicacaoFinanceiraService {
 
     const conta = await ContaCorrente.findOrFail(aplicacao.conta_corrente_id)
 
-    const statusAnterior = aplicacao.status
-    const statusNovo = payload.status
-
-    if (statusAnterior === 'ativa' && statusNovo === 'resgatada') {
-      conta.saldo = Number(conta.saldo) + Number(aplicacao.valor)
-    }
-
-    else if (statusAnterior === 'resgatada' && statusNovo === 'ativa') {
-      if (Number(conta.saldo) < Number(aplicacao.valor)) {
-        throw new Error('Saldo insuficiente para reativar a aplicação.')
-      }
-      conta.saldo = Number(conta.saldo) - Number(aplicacao.valor)
-    }
-    
-    else if (payload.valor && statusAnterior === 'ativa' && statusNovo === 'ativa') {
-      const diferenca = Number(payload.valor) - Number(aplicacao.valor)
-      if (diferenca > 0 && Number(conta.saldo) < diferenca) {
-        throw new Error('Saldo insuficiente para aumentar o valor da aplicação.')
-      }
-      conta.saldo = Number(conta.saldo) - diferenca
-    }
-
     await conta.save()
     aplicacao.merge(payload)
     await aplicacao.save()
@@ -72,11 +50,6 @@ export default class AplicacaoFinanceiraService {
 
     const conta = await ContaCorrente.findOrFail(aplicacao.conta_corrente_id)
 
-    if (aplicacao.status === 'ativa') {
-      const valorAplicacao = Number(aplicacao.valor) || 0
-      conta.saldo = Number(conta.saldo) + valorAplicacao
-      await conta.save()
-    }
 
     await aplicacao.delete()
 

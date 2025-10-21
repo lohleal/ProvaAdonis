@@ -14,7 +14,7 @@ export default class ContaCorrenteService {
   }
 
   static async criarConta(payload: any) {
-    // 🔹 Gera número de conta único
+  
     let numeroConta: string
     do {
       const numeroBase = Math.floor(1000 + Math.random() * 9000)
@@ -22,13 +22,13 @@ export default class ContaCorrenteService {
       numeroConta = `${numeroBase}-${digito}`
     } while (await ContaCorrente.findBy('numeroConta', numeroConta))
 
-    // 🔹 Cria e retorna a conta
+    
     const conta = await ContaCorrente.create({
       ...payload,
       numeroConta,
-      saldo: Number(payload.saldo) || 0  // Adicione log aqui
+      saldo: Number(payload.saldo) || 0  
     });
-    console.log('Conta criada com saldo:', conta.saldo);  // Adicione isso
+    console.log('Conta criada com saldo:', conta.saldo);  
     return conta.toJSON();
 
     

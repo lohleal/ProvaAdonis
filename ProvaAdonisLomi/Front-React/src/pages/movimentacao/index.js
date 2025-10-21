@@ -14,7 +14,7 @@ export default function IndexMovimentacaoAplicacao() {
     const navigate = useNavigate();
     const permissions = getPermissions();
     const dataUser = getDataUser();
-    const isGerente = dataUser?.papel_id === 1;  
+    const isGerente = dataUser?.papel_id === 1;
 
     function fetchData() {
         setLoad(true);
@@ -24,40 +24,54 @@ export default function IndexMovimentacaoAplicacao() {
                 Client.get('aplicacoesFinanceiras')
             ])
                 .then(([movimentacoesRes, aplicacoesRes]) => {
-                   
+
                     const movimentacoes = movimentacoesRes.data.data
-                        .filter(m => m.tipo === 'transferencia') 
+                        .filter(m => m.tipo === 'transferencia')
                         .filter(m => {
                             if (isGerente) return true;
                             const clienteEmailOrigem = m.contaOrigem?.cliente?.email;
                             const clienteEmailDestino = m.contaDestino?.cliente?.email;
                             return clienteEmailOrigem === dataUser.email || clienteEmailDestino === dataUser.email;
                         })
-                        .map(m => ({
-                            tipo_formatado: 'Transferência',
-                            valor_formatado: new Intl.NumberFormat('pt-BR', {
+                        .map(m => {
+                            const isSaida = m.contaOrigem?.cliente?.email === dataUser.email;
+                            const valorNumerico = m.valor;
+                            const valorFormatado = new Intl.NumberFormat('pt-BR', {
                                 style: 'currency',
                                 currency: 'BRL'
-                            }).format(m.valor),
-                            conta: `${m.contaOrigem.numeroConta} / ${m.contaDestino.numeroConta}`,
-                        }));
+                            }).format(valorNumerico);
 
-                
+                            return {
+                                tipo_formatado: 'Transferência',
+                                valor_formatado: isSaida
+                                    ? <span style={{ color: 'red' }}>-{valorFormatado}</span>
+                                    : <span>{valorFormatado}</span>,
+                                conta: `${m.contaOrigem.numeroConta} / ${m.contaDestino.numeroConta}`,
+                            };
+                        })
+
+
+
                     const aplicacoes = aplicacoesRes.data.data
                         .filter(a => {
-                            if (isGerente) return true;  
-                            return a.contaCorrente.cliente?.email === dataUser.email;  
+                            if (isGerente) return true;
+                            return a.contaCorrente.cliente?.email === dataUser.email;
                         })
-                        .map(a => ({
-                            tipo_formatado: 'Aplicação',
-                            valor_formatado: new Intl.NumberFormat('pt-BR', {
+                        .map(a => {
+                            const valorNumerico = a.valor;
+                            const valorFormatado = new Intl.NumberFormat('pt-BR', {
                                 style: 'currency',
                                 currency: 'BRL'
-                            }).format(a.valor),
-                            conta: `${a.contaCorrente.numeroConta} - ${a.contaCorrente.cliente?.nomeCompleto}`,
-                        }));
+                            }).format(valorNumerico);
 
-                    // Combina as duas fontes de dados
+                            return {
+                                tipo_formatado: 'Aplicação',
+                                valor_formatado: <span style={{ color: 'red' }}>-{valorFormatado}</span>,
+                                conta: `${a.contaCorrente.numeroConta} - ${a.contaCorrente.cliente?.nomeCompleto}`,
+                            };
+                        })
+
+
                     const combinedData = [...movimentacoes, ...aplicacoes];
                     setData(combinedData);
                 })

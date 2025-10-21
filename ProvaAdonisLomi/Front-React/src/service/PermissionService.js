@@ -5,12 +5,10 @@ const getPermissions = () => {
   return data
 }
 
-// Função para salvar as permissões no localStorage
 const setPermissions = (perm) => {
   localStorage.setItem('permissions', JSON.stringify({ ...perm }))
 }
 
-// Função para remover as permissões do localStorage
 const removePermissions = () => {
   localStorage.removeItem('permissions')
 }

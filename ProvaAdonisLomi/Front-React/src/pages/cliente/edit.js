@@ -7,7 +7,7 @@ import { Label, Input, Select, Submit } from "./style";
 import { Client } from '../../api/client';
 import { getPermissions } from '../../service/PermissionService';
 import { getDataUser } from '../../service/UserService';
-import { State, City } from 'country-state-city'; // ✅ Importação adicionada
+import { State, City } from 'country-state-city'; 
 
 export default function EditCliente() {
     const location = useLocation();
@@ -24,8 +24,8 @@ export default function EditCliente() {
     const [saldo, setSaldo] = useState('');
     const [load, setLoad] = useState(true);
     const [show, setShow] = useState(false);
-    const [estados, setEstados] = useState([]); // ✅ Corrigido
-    const [cidades, setCidades] = useState([]); // ✅ Adicionado
+    const [estados, setEstados] = useState([]); 
+    const [cidades, setCidades] = useState([]); 
     const navigate = useNavigate();
     const permissions = getPermissions();
     const dataUser = getDataUser();
@@ -47,7 +47,7 @@ export default function EditCliente() {
 
         Client.put(`clientes/${cliente.id}`, upCliente)
             .then(() => {
-                navigate('/clientes'); // navega direto sem mostrar modal
+                navigate('/clientes'); 
             })
             .catch(console.error);
     }
@@ -88,7 +88,7 @@ export default function EditCliente() {
             <NavigationBar />
             {load
                 ? <Container className="d-flex justify-content-center mt-5">
-                    <OrbitProgress variant="spokes" color="#582770" size="medium" />
+                    <OrbitProgress variant="spokes" color="#4D0F0F" size="medium" />
                 </Container>
                 : <Container className="mt-2">
                     <div className="row">

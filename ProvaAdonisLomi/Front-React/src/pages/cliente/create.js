@@ -7,7 +7,7 @@ import { Label, Input, Select, Submit } from "./style";
 import { Client } from '../../api/client';
 import { getPermissions } from '../../service/PermissionService';
 import { getDataUser } from '../../service/UserService';
-import { Country, State, City } from 'country-state-city'; // ← import da lib
+import { Country, State, City } from 'country-state-city'; 
 
 export default function CreateCliente() {
     const [nomeCompleto, setNomeCompleto] = useState('');
@@ -31,19 +31,17 @@ export default function CreateCliente() {
         if (!dataUser) navigate('/login');
         else if (permissions.createCliente === 0) navigate(-1);
     }
-
-    // 🔹 Carrega os estados do Brasil ao iniciar
+    
     useEffect(() => {
         verifyPermission();
 
         const estadosBrasil = State.getStatesOfCountry('BR');
         setEstados(estadosBrasil);
 
-        // Simula carregamento
+        
         setTimeout(() => setLoad(false), 500);
     }, []);
 
-    // 🔹 Atualiza as cidades quando o estado muda
     useEffect(() => {
         if (estado) {
             const cidadesEstado = City.getCitiesOfState('BR', estado);
@@ -72,10 +70,8 @@ export default function CreateCliente() {
     }
 
     function formatCPF(value) {
-        // Remove tudo que não for número
+        
         value = value.replace(/\D/g, '');
-
-        // Aplica a formatação 000.000.000-00
         value = value.replace(/(\d{3})(\d)/, '$1.$2');
         value = value.replace(/(\d{3})(\d)/, '$1.$2');
         value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');

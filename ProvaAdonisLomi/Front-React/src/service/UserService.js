@@ -5,12 +5,10 @@ const getDataUser = () => {
   return data
 }
 
-// Função para salvar o usuário no localStorage
 const setDataUser = (user) => {
   localStorage.setItem('data_user', JSON.stringify(user))
 }
 
-// Função para remover o usuário do localStorage
 const removeDataUser = () => {
   localStorage.removeItem('data_user')
 }

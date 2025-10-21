@@ -8,7 +8,7 @@ import DataTable from '../../components/datatable';
 import { Client } from '../../api/client';
 import { getPermissions } from '../../service/PermissionService';
 import { getDataUser } from '../../service/UserService';
-import PerfilDoCliente from '../../components/PerfilDoCliente'; // Import correto do frontend
+import PerfilDoCliente from '../../components/PerfilDoCliente'; 
 
 export default function HomeCliente() {
     const [data, setData] = useState([]);
